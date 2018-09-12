@@ -1,0 +1,96 @@
+-
+    id: 1
+    place_name: string
+    place_hierarchies:
+        -
+            id: 1
+            hierarchy_name: string
+            beacons:
+            -
+                id: 1
+                beacon_name: string
+                beacon_type: string
+                beacon_radius: string
+            -
+                id: 2
+                beacon_name: string
+                beacon_type: string
+                beacon_radius: string
+        -
+            id: 2
+            hierarchy_name: string
+            beacons:
+            -
+                id: 3
+                beacon_name: string
+                beacon_type: string
+                beacon_radius: string
+            -
+                id: 4
+                beacon_name: string
+                beacon_type: string
+                beacon_radius: string
+-
+    id: 1
+    place_name: string
+    place_hierarchies:
+        -
+            id: 3
+            hierarchy_name: string
+            beacons:
+            -
+                id: 5
+                beacon_name: string
+                beacon_type: string
+                beacon_radius: string
+            -
+                id: 6
+                beacon_name: string
+                beacon_type: string
+                beacon_radius: string
+-
+    id: 3
+    place_name: string
+    place_hierarchies:
+        -
+            id: 4
+            hierarchy_name: string
+            beacons:
+            -
+                id: 7
+                beacon_name: string
+                beacon_type: string
+                beacon_radius: string
+            -
+                id: 8
+                beacon_name: string
+                beacon_type: string
+                beacon_radius: string
+        -
+            id: 5
+            hierarchy_name: string
+            beacons:
+            -
+                id: 9
+                beacon_name: string
+                beacon_type: string
+                beacon_radius: string
+            -
+                id: 10
+                beacon_name: string
+                beacon_type: string
+                beacon_radius: string
+        -
+            id: 6
+            hierarchy_name: string
+            beacons:
+            -
+                id: 11
+                beacon_name: string
+                beacon_type: string
+                beacon_radius: string
+            -
+                id: 12
+                beacon_name: string
+                beacon_type: string
+                beacon_radius: string

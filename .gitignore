@@ -1,0 +1,10 @@
+.DS_Store
+.classpath
+.project
+.settings/
+.repository/
+target/
+.metadata
+.mule/
+catalog/
+airservices-pax-connection-to-arisdb/catalog/

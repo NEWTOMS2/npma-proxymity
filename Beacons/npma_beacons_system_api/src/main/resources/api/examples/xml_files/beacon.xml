@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <beacon_type>string</beacon_type>
+  <beacon_type_id>1</beacon_type_id>
+  <beacon_hierarchy>string</beacon_hierarchy>
+  <name>string</name>
+  <beacon_hierarchy_id>1</beacon_hierarchy_id>
+  <broadcast_url>string</broadcast_url>
+  <id_organization>93AB2E19-1057-4EF3-9856-5089FB5E6628</id_organization>
+  <id>1</id>
+</root>
