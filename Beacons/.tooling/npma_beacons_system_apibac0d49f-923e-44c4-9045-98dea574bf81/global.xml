@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<configuration-properties doc:name="Configuration properties" doc:id="81c6e42a-3836-436a-b6d2-3bf54ae68f2c" file="beacons-${env}.yaml" />
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="05a6bcfc-e48c-410c-9b73-37fdf6e06922" >
+		<db:mssql-connection host="${db.host}" user="sa" password="SeyHhv&amp;XT8.FCY#h" databaseName="Beacons_Proximity" />
+	</db:config>
+	<global-property doc:name="Global Property" doc:id="a7a4c13f-2792-4ff2-a4c1-73cb4442b1f6" name="env" value="DEV" />
+</mule>

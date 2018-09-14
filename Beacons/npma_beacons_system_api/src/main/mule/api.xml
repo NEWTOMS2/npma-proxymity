@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+    <http:listener-config name="api-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8081" />
+    </http:listener-config>
+    <apikit:config name="api-config" raml="api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <flow name="api-main">
+        <http:listener config-ref="api-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="api-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:BAD_REQUEST">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Bad request"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">400</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Method not allowed"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not acceptable"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Unsupported media type"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not Implemented"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="api-console">
+        <http:listener config-ref="api-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="api-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="put:\beacons\(id_organization)\hierarchy\(id_beacon_hierarchy):application\xml:api-config">
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
+            <ee:variables>
+                <ee:set-variable variableName="id_organization">attributes.uriParams.id_organization</ee:set-variable>
+                <ee:set-variable variableName="id_beacon_hierarchy">attributes.uriParams.id_beacon_hierarchy</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  status: true,
+  message: "beacon hierarchy updated"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="put:\beacons\(id_organization)\place_hierarchy\(id_beacon_place_hierarchy):application\xml:api-config">
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
+            <ee:variables>
+                <ee:set-variable variableName="id_organization">attributes.uriParams.id_organization</ee:set-variable>
+                <ee:set-variable variableName="id_beacon_place_hierarchy">attributes.uriParams.id_beacon_place_hierarchy</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  status: true,
+  message: "beacon place hierarchy updated"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="put:\beacons\(id_organization)\type\(id_beacon_type):application\json:api-config">
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
+            <ee:variables>
+                <ee:set-variable variableName="id_organization">attributes.uriParams.id_organization</ee:set-variable>
+                <ee:set-variable variableName="id_beacon_type">attributes.uriParams.id_beacon_type</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  status: true,
+  message: "beacon type updated"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="put:\beacons\(id_organization)\(id_beacon):application\json:api-config">
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
+            <ee:variables>
+                <ee:set-variable variableName="id_organization">attributes.uriParams.id_organization</ee:set-variable>
+                <ee:set-variable variableName="id_beacon">attributes.uriParams.id_beacon</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  status: true,
+  message: "beacon updated"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="get:\beacons:api-config">
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+[
+  {
+    beacon_type: "Advertisement Pusher",
+    id_beacon_type: 1,
+    beacon_hierarchy: "Front Store",
+    name: "Blue-Bird",
+    id_beacon_hierarchy: 1,
+    broadcast_url: "www.url.com",
+    id_organization: "93AB2E19-1057-4EF3-9856-5089FB5E6628",
+    id: 1
+  }, 
+  {
+    beacon_type: "Point Catcher",
+    id_beacon_type: 2,
+    beacon_hierarchy: "Rack 1",
+    name: "Jade",
+    id_beacon_hierarchy: 2,
+    broadcast_url: "www.url.com",
+    id_organization: "93AB2E19-1057-4EF3-9856-5089FB5E6628",
+    id: 2
+  }
+]]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="get:\beacons\(id_organization)\hierarchy:api-config">
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
+            <ee:variables>
+                <ee:set-variable variableName="id_organization">attributes.uriParams.id_organization</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+[
+  {
+    id: 1,
+    id_organization: "ECB11EDB-3860-4733-9096-DC67FEDAD127",
+    name: "Front Store"
+  }, 
+  {
+    id: 2,
+    id_organization: "ECB11EDB-3860-4733-9096-DC67FEDAD127",
+    name: "Rack 1"
+  }, 
+  {
+    id: 3,
+    id_organization: "ECB11EDB-3860-4733-9096-DC67FEDAD127",
+    name: "Section 5"
+  }
+]]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="get:\beacons\(id_organization)\place_hierarchy:api-config">
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
+            <ee:variables>
+                <ee:set-variable variableName="id_organization">attributes.uriParams.id_organization</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  places: [
+    {
+      id: 1,
+      name: "Front Store",
+      hierarchy: [
+        {
+          id: 1,
+          name: "Left Corner",
+          beacons: [
+            {
+              id: 56,
+              name: "Yellow-Bird",
+              "type": "Advertisement Pusher",
+              radius: "12m"
+            }, 
+            {
+              id: 77,
+              name: "Mole-Vendor",
+              "type": "Move Behavior",
+              radius: "2m"
+            }
+          ]
+        }, 
+        {
+          id: 2,
+          name: "Right Corner",
+          beacons: [
+            {
+              id: 23,
+              name: "Data-Rock",
+              "type": "Point Catcher",
+              radius: "45m"
+            }, 
+            {
+              id: 14,
+              name: "Mule-Road",
+              "type": "Solo Wacther",
+              radius: "100m"
+            }
+          ]
+        }
+      ]
+    }, 
+    {
+      id: 2,
+      name: "Electronics",
+      hierarchy: [
+        {
+          id: 1,
+          name: "Left Corner",
+          beacons: [
+            {
+              id: 52,
+              name: "Yellow-Bird-II",
+              "type": "Advertisement Pusher",
+              radius: "12m"
+            }, 
+            {
+              id: 77,
+              name: "Mole-Vendor-A",
+              "type": "Move Behavior",
+              radius: "2m"
+            }
+          ]
+        }, 
+        {
+          id: 2,
+          name: "Right Corner",
+          beacons: [
+            {
+              id: 23,
+              name: "Data-Rock-Ruby",
+              "type": "Point Catcher",
+              radius: "22m"
+            }, 
+            {
+              id: 14,
+              name: "Mule-Road",
+              "type": "Solo Wacther",
+              radius: "100m"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  unassigned_beacons: [
+    {
+      id: 45,
+      name: "Blue-Bird",
+      "type": "Advertisement Pusher",
+      radius: "45m"
+    }, 
+    {
+      id: 12,
+      name: "Jade",
+      "type": "Advertisement Pusher",
+      radius: "45m"
+    }, 
+    {
+      id: 54,
+      name: "Invisible-Gentelmen",
+      "type": "Advertisement Pusher",
+      radius: "45m"
+    }, 
+    {
+      id: 34,
+      name: "White-Peakcok",
+      "type": "Advertisement Pusher",
+      radius: "45m"
+    }
+  ]
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="get:\beacons\(id_organization)\type:api-config">
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
+            <ee:variables>
+                <ee:set-variable variableName="id_organization">attributes.uriParams.id_organization</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+[
+  {
+    id: 1,
+    id_organization: "ECB11EDB-3860-4733-9096-DC67FEDAD127",
+    name: "Advertisement Pusher"
+  }, 
+  {
+    id: 2,
+    id_organization: "ECB11EDB-3860-4733-9096-DC67FEDAD127",
+    name: "Point Catcher"
+  }, 
+  {
+    id: 3,
+    id_organization: "ECB11EDB-3860-4733-9096-DC67FEDAD127",
+    name: "Move Behavior"
+  }
+]]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="get:\beacons\(id_organization)\hierarchy\(id_beacon_hierarchy):api-config">
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
+            <ee:variables>
+                <ee:set-variable variableName="id_organization">attributes.uriParams.id_organization</ee:set-variable>
+                <ee:set-variable variableName="id_beacon_hierarchy">attributes.uriParams.id_beacon_hierarchy</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  id: 1,
+  id_organization: "ECB11EDB-3860-4733-9096-DC67FEDAD127",
+  name: "Front Store"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="get:\beacons\(id_organization)\type\(id_beacon_type):api-config">
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
+            <ee:variables>
+                <ee:set-variable variableName="id_organization">attributes.uriParams.id_organization</ee:set-variable>
+                <ee:set-variable variableName="id_beacon_type">attributes.uriParams.id_beacon_type</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  id: 1,
+  id_organization: "ECB11EDB-3860-4733-9096-DC67FEDAD127",
+  name: "Advertisement Pusher"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="get:\beacons\(id_organization)\(id_beacon):api-config">
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
+            <ee:variables>
+                <ee:set-variable variableName="id_organization">attributes.uriParams.id_organization</ee:set-variable>
+                <ee:set-variable variableName="id_beacon">attributes.uriParams.id_beacon</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  beacon_type: "Advertisement Pusher",
+  id_beacon_type: 1,
+  beacon_hierarchy: "Rack 1",
+  name: "Blue-Bird",
+  id_beacon_hierarchy: 1,
+  broadcast_url: "www.url.com",
+  id_organization: "93AB2E19-1057-4EF3-9856-5089FB5E6628",
+  id: 1
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="get:\beacons\(id_organization):api-config">
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
+            <ee:variables>
+                <ee:set-variable variableName="id_organization">attributes.uriParams.id_organization</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+[
+  {
+    beacon_type: "Advertisement Pusher",
+    id_beacon_type: 1,
+    beacon_hierarchy: "Front Store",
+    name: "Blue-Bird",
+    id_beacon_hierarchy: 1,
+    broadcast_url: "www.url.com",
+    id_organization: "93AB2E19-1057-4EF3-9856-5089FB5E6628",
+    id: 1
+  }, 
+  {
+    beacon_type: "Point Catcher",
+    id_beacon_type: 2,
+    beacon_hierarchy: "Rack 1",
+    name: "Jade",
+    id_beacon_hierarchy: 2,
+    broadcast_url: "www.url.com",
+    id_organization: "93AB2E19-1057-4EF3-9856-5089FB5E6628",
+    id: 2
+  }
+]]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="post:\beacons\(id_organization)\hierarchy:application\json:api-config">
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
+            <ee:variables>
+                <ee:set-variable variableName="id_organization">attributes.uriParams.id_organization</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  status: true,
+  message: "registered beacon hierarchy"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="post:\beacons\(id_organization)\type:application\json:api-config">
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" doc:id="45cdd64b-f12d-4e2d-81ab-1f4e7b7af5c4">
+            <ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output text/json
+---
+write(payload, "application/json")]]></ee:set-payload>
+			</ee:message>
+			<ee:variables>
+                <ee:set-variable variableName="id_organization"><![CDATA[attributes.uriParams.id_organization]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <db:stored-procedure doc:name="insertBeaconType" doc:id="b75560e9-b67f-44ed-b204-8fffcc22c39d" config-ref="Database_Config">
+			<db:sql >{CALL insertBeaconType(:json)}</db:sql>
+			<db:input-parameters ><![CDATA[#[ {'json': payload as String} ]]]></db:input-parameters>
+		</db:stored-procedure>
+		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  status: true,
+  message: "registered beacon type"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+</mule>

@@ -1,0 +1,13 @@
+{
+  "sampleData": {
+    "6dd06a74-808a-42ff-b0c4-70db5741678b": {
+      "payload": "sample_data/root.xml"
+    },
+    "187a5c95-a80f-4596-a4b1-0f01d2a1d12f": {
+      "payload": "sample_data/json.json"
+    },
+    "45cdd64b-f12d-4e2d-81ab-1f4e7b7af5c4": {
+      "payload": "sample_data/json_1.json"
+    }
+  }
+}

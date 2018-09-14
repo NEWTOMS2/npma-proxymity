@@ -1,0 +1,52 @@
+{
+  "configs": [
+    "update_beacon_hierarchy.xml",
+    "update_beacon_place_hierarchy.xml",
+    "global.xml",
+    "api.xml",
+    "insert_beacon_type.xml",
+    "update_beacon_type.xml",
+    "insert_beacon_hierarchy.xml",
+    "update_beacon.xml"
+  ],
+  "secureProperties": [],
+  "redeploymentEnabled": true,
+  "name": "com.mycompany:npma_beacons_system_api:1.0.0-SNAPSHOT",
+  "minMuleVersion": "4.1.1",
+  "requiredProduct": "MULE_EE",
+  "classLoaderModelLoaderDescriptor": {
+    "id": "mule",
+    "attributes": {
+      "exportedPackages": [],
+      "exportedResources": [
+        "api/api.raml",
+        "api/examples/json_files/beacon.json",
+        "api/examples/json_files/beaconHierarchies.json",
+        "api/examples/json_files/beaconHierarchy.json",
+        "api/examples/json_files/beacons.json",
+        "api/examples/json_files/beaconsPlaceHierarchies.json",
+        "api/examples/json_files/beaconType.json",
+        "api/examples/json_files/beaconTypes.json",
+        "api/examples/xml_files/beacon.xml",
+        "api/examples/xml_files/beaconHierarchy.xml",
+        "api/examples/xml_files/beaconPlaceHierarchy.xml",
+        "api/examples/xml_files/beaconType.xml",
+        "api/resourceTypes/beacon.raml",
+        "api/resourceTypes/beacon_hierarchy.raml",
+        "api/resourceTypes/beacon_place_hierarchy.raml",
+        "api/resourceTypes/beacon_place_hierarchy_put.raml",
+        "api/resourceTypes/beacon_type.raml",
+        "api/schemas/beacon.xsd",
+        "api/schemas/beaconHierarchy.xsd",
+        "api/schemas/beaconPlaceHierarchy.xsd",
+        "api/schemas/beaconType.xsd",
+        "beacons-DEV.yaml",
+        "log4j2.xml"
+      ]
+    }
+  },
+  "bundleDescriptorLoader": {
+    "id": "mule",
+    "attributes": {}
+  }
+}
