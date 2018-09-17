@@ -8,6 +8,9 @@
     },
     "45cdd64b-f12d-4e2d-81ab-1f4e7b7af5c4": {
       "payload": "sample_data/json_1.json"
+    },
+    "85bbb289-95e1-4e8f-a669-9d67f4d50419": {
+      "payload": "sample_data/json_2.json"
     }
   }
 }
