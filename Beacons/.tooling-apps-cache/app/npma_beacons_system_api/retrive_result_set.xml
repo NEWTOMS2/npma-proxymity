@@ -5,6 +5,6 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<flow name="serialize_result_set" doc:id="8e1cc1bd-5cdb-490c-bbbb-b6af92582df2" >
-		<set-payload value="#[payload.resultSet1[0].data]" doc:name="Result Set" doc:id="f60baafc-1c6b-43df-8239-57e09ba10084" />
+		<set-payload value="#[payload.resultSet1[0].data]" doc:name="Result Set" doc:id="f60baafc-1c6b-43df-8239-57e09ba10084" mimeType="application/json"/>
 	</flow>
 </mule>
