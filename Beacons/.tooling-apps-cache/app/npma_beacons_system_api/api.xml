@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd  http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+    <http:listener-config name="api-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8081" />
+    </http:listener-config>
+    <apikit:config name="api-config" raml="api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <flow name="api-main">
+        <http:listener config-ref="api-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="api-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:BAD_REQUEST">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Bad request"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">400</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Method not allowed"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not acceptable"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Unsupported media type"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not Implemented"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="api-console">
+        <http:listener config-ref="api-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="api-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="put:\beacons\(id_organization)\type\(id_beacon_type):application\json:api-config">
+        <ee:transform doc:id="b7217aca-9d89-42ff-94fc-590c35daa645">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output text/json
+---
+write(payload, "application/json")]]></ee:set-payload>
+            </ee:message>
+            <ee:variables>
+                <ee:set-variable variableName="id_organization"><![CDATA[attributes.uriParams.id_organization]]></ee:set-variable>
+                <ee:set-variable variableName="id_beacon_type"><![CDATA[attributes.uriParams.id_beacon_type]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <db:stored-procedure doc:name="updateBeaconType" doc:id="c2ffc077-80e5-4b23-9201-fce749b90dfc" config-ref="Database_Config">
+            <db:sql>{CALL updateBeaconType(:json)}</db:sql>
+            <db:input-parameters><![CDATA[#[{
+	'json': payload as String
+}]]]></db:input-parameters>
+        </db:stored-procedure>
+        <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  status: true,
+  message: "beacon type updated"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="put:\beacons\(id_organization)\(id_beacon):application\json:api-config">
+        <ee:transform doc:id="dbb02e8e-afc5-44e2-8a31-c3bac083743e">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output text/json
+---
+write(payload, "application/json")]]></ee:set-payload>
+            </ee:message>
+            <ee:variables>
+                <ee:set-variable variableName="id_organization"><![CDATA[attributes.uriParams.id_organization]]></ee:set-variable>
+                <ee:set-variable variableName="id_beacon"><![CDATA[attributes.uriParams.id_beacon]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <db:stored-procedure doc:name="updateBeacon" doc:id="0d40e0b0-2b59-4ea9-8189-fb532b23e67a" config-ref="Database_Config">
+            <db:sql>{CALL updateBeacon(:json)}</db:sql>
+            <db:input-parameters><![CDATA[#[{
+	'json': payload as String
+}]]]></db:input-parameters>
+        </db:stored-procedure>
+        <logger level="INFO" doc:name="Logger" doc:id="f80fdd25-d93c-4926-beec-f243e159becf" message="#[payload]" />
+        <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  status: true,
+  message: "beacon updated"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="get:\beacons:api-config">
+        <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="b58c47e7-82f6-443f-b5c3-88def68abd59">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+[
+  {
+    beacon_type: "Advertisement Pusher",
+    id_beacon_type: 1,
+    beacon_hierarchy: "Front Store",
+    name: "Blue-Bird",
+    id_beacon_hierarchy: 1,
+    broadcast_url: "www.url.com",
+    id_organization: "93AB2E19-1057-4EF3-9856-5089FB5E6628",
+    id: 1
+  }, 
+  {
+    beacon_type: "Point Catcher",
+    id_beacon_type: 2,
+    beacon_hierarchy: "Rack 1",
+    name: "Jade",
+    id_beacon_hierarchy: 2,
+    broadcast_url: "www.url.com",
+    id_organization: "93AB2E19-1057-4EF3-9856-5089FB5E6628",
+    id: 2
+  }
+]]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <db:stored-procedure doc:name="fecthAllBeacons" doc:id="e54f945a-85c4-48dd-95bd-451f738b2870" config-ref="Database_Config">
+            <db:sql>{CALL fecthAllBeacons}</db:sql>
+        </db:stored-procedure>
+        <flow-ref doc:name="serialize_result_set" doc:id="ecf5287b-5930-411b-b040-0bbd789da32c" name="serialize_result_set" />
+    </flow>
+    <flow name="get:\beacons\(id_organization)\hierarchy:api-config">
+        <ee:transform>
+            <ee:variables>
+                <ee:set-variable variableName="id_organization">attributes.uriParams.id_organization</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <db:stored-procedure doc:name="fecthAllBeaconsHierarchyByOrganization" doc:id="34f5eacb-effb-4632-9c46-430df09128cb" config-ref="Database_Config">
+            <db:sql>{CALL fecthAllBeaconsHierarchyByOrganization(:idOganization)}</db:sql>
+            <db:input-parameters><![CDATA[#[{
+	'idOganization': attributes.uriParams.id_organization
+}]]]></db:input-parameters>
+        </db:stored-procedure>
+        <flow-ref doc:name="serialize_result_set" doc:id="3810c6aa-6968-428a-979e-6214bf92d0cf" name="serialize_result_set" />
+    </flow>
+    <flow name="get:\beacons\(id_organization)\place_hierarchy:api-config">
+        <ee:transform doc:id="ac17ed76-25d4-48ab-a9c1-dea05297404a">
+            <ee:variables>
+                <ee:set-variable variableName="id_organization"><![CDATA[attributes.uriParams.id_organization]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <db:stored-procedure doc:name="fecthBeaconsPlaceHierarchy" doc:id="95481d88-302d-41f1-a80d-3278bfbda2f4" config-ref="Database_Config">
+            <db:sql>{CALL fecthBeaconsPlaceHierarchy(:idOrganization)}</db:sql>
+            <db:input-parameters><![CDATA[#[{
+	'idOrganization': attributes.uriParams.id_organization
+}]]]></db:input-parameters>
+        </db:stored-procedure>
+        <flow-ref doc:name="serialize_result_set" doc:id="08f61527-989b-4d3d-acd6-fb4b9f4c2b10" name="serialize_result_set" />
+    </flow>
+    <flow name="get:\beacons\(id_organization)\type:api-config">
+        <ee:transform>
+            <ee:variables>
+                <ee:set-variable variableName="id_organization">attributes.uriParams.id_organization</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <db:stored-procedure doc:name="fecthAllBeaconsTypeByOrganization" doc:id="3989d480-372d-467e-b735-a10ae732013c" config-ref="Database_Config">
+            <db:sql>{CALL fecthAllBeaconsTypeByOrganization(:idOganization)}</db:sql>
+            <db:input-parameters><![CDATA[#[{
+	'idOganization': attributes.uriParams.id_organization
+}]]]></db:input-parameters>
+        </db:stored-procedure>
+        <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+[
+  {
+    id: 1,
+    id_organization: "ECB11EDB-3860-4733-9096-DC67FEDAD127",
+    name: "Advertisement Pusher"
+  }, 
+  {
+    id: 2,
+    id_organization: "ECB11EDB-3860-4733-9096-DC67FEDAD127",
+    name: "Point Catcher"
+  }, 
+  {
+    id: 3,
+    id_organization: "ECB11EDB-3860-4733-9096-DC67FEDAD127",
+    name: "Move Behavior"
+  }
+]]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="get:\beacons\(id_organization)\hierarchy\(id_beacon_hierarchy):api-config">
+        <ee:transform doc:id="08edbdde-8cdd-4a99-a5c1-bee03781b2bb">
+            <ee:variables>
+                <ee:set-variable variableName="id_organization"><![CDATA[attributes.uriParams.id_organization]]></ee:set-variable>
+                <ee:set-variable variableName="id_beacon_hierarchy"><![CDATA[attributes.uriParams.id_beacon_hierarchy]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <db:stored-procedure doc:name="fecthBeaconHierarchyById" doc:id="86ed62dd-259f-413e-8867-0d49cc8f1ff8" config-ref="Database_Config">
+            <db:sql>{CALL fecthBeaconHierarchyById(:id)}</db:sql>
+            <db:input-parameters><![CDATA[#[{
+	'id': attributes.uriParams.id_beacon_hierarchy
+}]]]></db:input-parameters>
+        </db:stored-procedure>
+        <flow-ref doc:name="serialize_result_set" doc:id="05764387-3bee-4ee0-a5cd-5eef18d7e976" name="serialize_result_set" />
+    </flow>
+    <flow name="get:\beacons\(id_organization)\type\(id_beacon_type):api-config">
+        <ee:transform>
+            <ee:variables>
+                <ee:set-variable variableName="id_organization">attributes.uriParams.id_organization</ee:set-variable>
+                <ee:set-variable variableName="id_beacon_type">attributes.uriParams.id_beacon_type</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <db:stored-procedure doc:name="fecthBeaconTypeById" doc:id="f873be23-b6e1-49d0-af87-f2e3c2448279" config-ref="Database_Config">
+            <db:sql>{CALL fecthBeaconTypeById(:id)}</db:sql>
+            <db:input-parameters><![CDATA[#[{
+	'id': attributes.uriParams.id_beacon_type
+}]]]></db:input-parameters>
+        </db:stored-procedure>
+        <flow-ref doc:name="serialize_result_set" doc:id="e9ce5f47-1c6c-4c84-9286-dbf6a7d9d0a6" name="serialize_result_set" />
+    </flow>
+    <flow name="get:\beacons\(id_organization)\(id_beacon):api-config">
+        <ee:transform doc:id="b42a4d12-ce20-4502-9b54-19685fdb60a8">
+            <ee:message />
+            <ee:variables>
+                <ee:set-variable variableName="id_organization"><![CDATA[attributes.uriParams.id_organization]]></ee:set-variable>
+                <ee:set-variable variableName="id_beacon"><![CDATA[attributes.uriParams.id_beacon]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <db:stored-procedure doc:name="fecthBeaconById" doc:id="784ea453-8b05-4e87-832d-38e42a40a133" config-ref="Database_Config">
+            <db:sql>{CALL fecthBeaconById(:id)}</db:sql>
+            <db:input-parameters><![CDATA[#[{
+	'id': attributes.uriParams.id_beacon
+}]]]></db:input-parameters>
+        </db:stored-procedure>
+        <flow-ref doc:name="serialize_result_set" doc:id="e688cd71-e0d8-41e8-aec0-31345cac27d0" name="serialize_result_set" />
+    </flow>
+    <flow name="get:\beacons\(id_organization):api-config">
+        <ee:transform doc:id="00ed0ced-a044-43e5-8a5a-176b22b53609">
+            <ee:message />
+            <ee:variables>
+                <ee:set-variable variableName="id_organization"><![CDATA[attributes.uriParams.id_organization]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <db:stored-procedure doc:name="fecthAllBeaconsByOrganization" doc:id="20cb0778-b014-4027-86d9-20b3b9529d13" config-ref="Database_Config">
+            <db:sql>{CALL fecthAllBeaconsByOrganization(:idOrganization)}</db:sql>
+            <db:input-parameters><![CDATA[#[{
+	'idOrganization': attributes.uriParams.id_organization
+}]]]></db:input-parameters>
+        </db:stored-procedure>
+        <flow-ref doc:name="serialize_result_set" doc:id="239251a2-7d69-49c2-b59f-f3e80d532103" name="serialize_result_set" />
+    </flow>
+    <flow name="post:\beacons\(id_organization)\hierarchy:application\json:api-config">
+        <ee:transform doc:id="ba8e2ecc-b622-444f-9f2a-cf4131410710">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output text/json
+---
+write(payload, "application/json")]]></ee:set-payload>
+            </ee:message>
+            <ee:variables>
+                <ee:set-variable variableName="id_organization"><![CDATA[attributes.uriParams.id_organization]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <db:stored-procedure doc:name="insertBeaconHierarchy" doc:id="154c5eb1-273f-4c86-8da4-8666c668b5d9" config-ref="Database_Config">
+            <db:sql>{CALL insertBeaconHierarchy(:json)}</db:sql>
+            <db:input-parameters><![CDATA[#[{
+	'json': payload as String
+}]]]></db:input-parameters>
+        </db:stored-procedure>
+        <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="2d834ad2-2bf0-4af3-9419-305f784329ac" doc:name="Output State Messange">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  status: true,
+  message: "registered beacon hierarchy"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="post:\beacons\(id_organization)\type:application\json:api-config">
+        <ee:transform doc:id="45cdd64b-f12d-4e2d-81ab-1f4e7b7af5c4">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output text/json
+---
+write(payload, "application/json")]]></ee:set-payload>
+            </ee:message>
+            <ee:variables>
+                <ee:set-variable variableName="id_organization"><![CDATA[attributes.uriParams.id_organization]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <db:stored-procedure doc:name="insertBeaconType" doc:id="5e21fbce-e6f0-4cbf-94f4-1f17682404be" config-ref="Database_Config">
+            <db:sql>{CALL insertBeaconType(:json)}</db:sql>
+            <db:input-parameters><![CDATA[#[{
+	'json': payload as String
+}]]]></db:input-parameters>
+        </db:stored-procedure>
+        <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="584bd245-4028-4282-babf-471f6dbb7e09" doc:name="Output State Messange">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  status: true,
+  message: "registered beacon type"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="put:\beacons\(id_organization)\hierarchy\(id_beacon_hierarchy):application\json:api-config">
+        <ee:transform doc:id="5f4b4bf1-c937-489d-a3e6-f91dca2404c2">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output text/json
+---
+write(payload, "application/json")]]></ee:set-payload>
+            </ee:message>
+            <ee:variables>
+                <ee:set-variable variableName="id_organization"><![CDATA[attributes.uriParams.id_organization]]></ee:set-variable>
+                <ee:set-variable variableName="id_beacon_hierarchy"><![CDATA[attributes.uriParams.id_beacon_hierarchy]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <db:stored-procedure doc:name="updateBeaconHierarchy" doc:id="b2bc3bc5-172a-481b-b7ff-f318eafecaf7" config-ref="Database_Config">
+            <db:sql>{CALL updateBeaconHierarchy(:json)}</db:sql>
+            <db:input-parameters><![CDATA[#[{
+	'json': payload as String
+}]]]></db:input-parameters>
+        </db:stored-procedure>
+        <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  status: true,
+  message: "beacon hierarchy updated"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="put:\beacons\(id_organization)\place_hierarchy:application\json:api-config">
+        <ee:transform doc:id="7ea7e3d4-c9bf-476a-8435-acd405fd74a5">
+            <ee:variables>
+                <ee:set-variable variableName="id_organization"><![CDATA[attributes.uriParams.id_organization]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+		<ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  status: true,
+  message: "beacon place hierarchy updated"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+</mule>
