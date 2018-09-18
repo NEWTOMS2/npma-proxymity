@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="get-beacons-hierarchies-flow" doc:id="a3819507-074d-41a0-b18e-8316b6ca3fea" >
+		<http:request method="GET" doc:name="call systems api" doc:id="a6369be4-1478-47a8-83f1-a3102b559e21" config-ref="Beacons_HTTP_Request_configuration" path="/api/beacons/{id_organization}/hierarchy">
+            <http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization
+}]]]></http:uri-params>
+        </http:request>
+	</flow>
+	<flow name="get-beacons-place-hierarchy-flow" doc:id="9dd73c0f-7bf6-4d24-8a0b-5d01dc1c1acc" >
+		<http:request method="GET" doc:name="call systems api" doc:id="f4f80ded-1e76-43af-b69e-a5805155742f" config-ref="Beacons_HTTP_Request_configuration" path="/api/beacons/{id_organization}/place_hierarchy">
+            <http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization
+}]]]></http:uri-params>
+        </http:request>
+	</flow>
+	<flow name="get-beacon-hierarchy-in-organization-flow" doc:id="5318941c-a4bc-4103-bf21-abdd20ec903c" >
+		<http:request method="GET" doc:name="call systems api" doc:id="9aa842af-fc82-4cf1-9d42-a3ad5d3131b5" config-ref="Beacons_HTTP_Request_configuration" path="/api/beacons/{id_organization}/hierarchy/{id_beacon_hierarchy}">
+            <http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization,
+	"id_beacon_hierarchy" : attributes.uriParams.id_beacon_hierarchy
+}]]]></http:uri-params>
+        </http:request>
+	</flow>
+	<flow name="get-beacon-type-in-organization-flow" doc:id="7eee9e2e-d140-4de2-bf61-5e87e0962f94" >
+		<http:request method="GET" doc:name="call systems api" doc:id="68f31af4-51c8-4864-8361-e218df4fc5e4" config-ref="Beacons_HTTP_Request_configuration" path="/api/beacons/{id_organization}/type/{id_beacon_type}">
+            <http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization,
+	"id_beacon_type" : attributes.uriParams.id_beacon_type
+}]]]></http:uri-params>
+        </http:request>
+	</flow>
+	<flow name="get-beacons-types-in-organization-flow" doc:id="a52b7800-e5cb-4aef-8ecf-a2effdb0d285" >
+		<http:request method="GET" doc:name="call systems api" doc:id="ffb9508f-9e24-4cda-be1e-3bc69224e3ca" config-ref="Beacons_HTTP_Request_configuration" path="/api/beacons/{id_organization}/type">
+            <http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization
+}]]]></http:uri-params>
+        </http:request>
+	</flow>
+	<flow name="get-beacon-by-id-in-organization-flow" doc:id="f5b8e34d-257e-4c6e-82e9-53c82554f4b2" >
+		<http:request method="GET" doc:name="call systems api" doc:id="8c41aa1a-6abb-494c-8606-2bb0a27ab163" config-ref="Beacons_HTTP_Request_configuration" path="/api/beacons/{id_organization}/{id_beacon}">
+            <http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization,
+	"id_beacon" : attributes.uriParams.id_beacon
+}]]]></http:uri-params>
+        </http:request>
+	</flow>
+	<flow name="get-beacons-by-organization-flow" doc:id="a88d88d0-3876-459c-9fce-b5e2f4e7539f" >
+		<http:request method="GET" doc:name="call systems api" doc:id="754f8add-7329-4560-8465-787e8c2616e5" config-ref="Beacons_HTTP_Request_configuration" path="/api/beacons/{id_organization}">
+            <http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization
+}]]]></http:uri-params>
+        </http:request>
+	</flow>
+	<flow name="get-all-beacons-flow" doc:id="1afc91e0-0248-4698-9f56-d64b2694047f" >
+		<http:request method="GET" doc:name="call system api" doc:id="0d8a0824-78e1-4c36-9f2c-70ad4213ae32" config-ref="Beacons_HTTP_Request_configuration" path="/api/beacons" />
+	</flow>
+</mule>
