@@ -261,30 +261,7 @@ output application/json
 	'idOganization': attributes.uriParams.id_organization
 }]]]></db:input-parameters>
         </db:stored-procedure>
-        <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-[
-  {
-    id: 1,
-    id_organization: "ECB11EDB-3860-4733-9096-DC67FEDAD127",
-    name: "Advertisement Pusher"
-  }, 
-  {
-    id: 2,
-    id_organization: "ECB11EDB-3860-4733-9096-DC67FEDAD127",
-    name: "Point Catcher"
-  }, 
-  {
-    id: 3,
-    id_organization: "ECB11EDB-3860-4733-9096-DC67FEDAD127",
-    name: "Move Behavior"
-  }
-]]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="serialize_result_set" doc:id="428a5385-cc49-4bfb-963e-29d0cbc66b90" name="serialize_result_set"/>
     </flow>
     <flow name="get:\beacons\(id_organization)\hierarchy\(id_beacon_hierarchy):api-config">
         <ee:transform doc:id="08edbdde-8cdd-4a99-a5c1-bee03781b2bb">
@@ -395,7 +372,8 @@ write(payload, "application/json")]]></ee:set-payload>
 	'json': payload as String
 }]]]></db:input-parameters>
         </db:stored-procedure>
-        <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="584bd245-4028-4282-babf-471f6dbb7e09" doc:name="Output State Messange">
+        <logger level="INFO" doc:name="Logger" doc:id="2e19358e-d157-4feb-8e33-76ab898f5bed" message="#[payload]"/>
+		<ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="584bd245-4028-4282-babf-471f6dbb7e09" doc:name="Output State Messange">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
