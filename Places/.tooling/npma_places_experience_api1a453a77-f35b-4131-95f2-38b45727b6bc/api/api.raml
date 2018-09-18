@@ -1,0 +1,52 @@
+#%RAML 1.0
+version: v1
+title: Places Experience API
+types: 
+  Place:
+    type: object
+    properties: 
+      id?: integer
+      id_organization: string
+      name: string
+/{id_organization}:
+  /places:
+    get:
+      description: Get all places from a Organization
+      responses: 
+        200:
+          body: 
+            application/json:
+              type: Place[]
+              example: !include examples/json_files/places.json
+    post:
+      description: Create a new place
+      body: 
+        application/json:
+          type: Place
+          example: !include examples/json_files/place.json
+      responses: 
+        200:
+          body: 
+            application/json:
+              example: !include examples/json_files/responses/place_created.json
+    /{id_place}:
+      get:
+        description: Get a place by Id
+        responses: 
+          200:
+            body: 
+              application/json:
+                type: Place
+                example: !include examples/json_files/place.json
+      put:
+        description: Update a place
+        body: 
+          application/json:
+            type: Place
+            example: !include examples/json_files/place.json
+        responses: 
+          200:
+            body: 
+              application/json:
+                example: !include examples/json_files/responses/place_updated.json
+  
