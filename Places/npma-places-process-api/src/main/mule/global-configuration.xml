@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<configuration-properties doc:name="Configuration properties" doc:id="042165f1-e572-48f4-a009-6e771135c8a8" file="beacons-${env}.yaml" />
+	<global-property doc:name="Global Property" doc:id="0a2fbed4-2c54-4db7-85f0-ef099016975c" doc:description="env = PRO" name="env" value="PRO" />
+	<http:listener-config name="Places_HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="c3bff47c-d659-4398-961d-1b56ce1e5893" >
+		<http:listener-connection host="${http.process.host}" port="${http.process.port}" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="0f18d250-7190-4860-8fde-bd4e6d7d0b78" doc:description="Se conecta a api de sistemas">
+		<http:request-connection host="${http.system.host}" port="${http.system.port}" />
+	</http:request-config>
+</mule>
