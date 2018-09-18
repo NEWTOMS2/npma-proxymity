@@ -1,0 +1,158 @@
+#%RAML 1.0
+baseUri: https://mocksvc.mulesoft.com/mocks/84b38d8b-00f4-4644-8d6e-9379e9c8f9fd/localhost # baseUri: https://mocksvc.mulesoft.com/mocks/af58d177-497f-46ca-872d-aa6b3e96ed30 # baseUri: https://mocksvc.mulesoft.com/mocks/8345621d-5d9e-46ce-b810-bc67c0cd2816 # 
+title: Beacon Process API
+version: v1
+types:
+  beacon: !include resourceTypes/beacon.raml
+  beaconType: !include resourceTypes/beacon_type.raml
+  beaconHierarchy: !include resourceTypes/beacon_hierarchy.raml
+  beaconPlaceHierarchyUpdate: !include resourceTypes/beacon_place_hierarchy_put.raml
+  beaconsPlacesHierarchy: !include resourceTypes/beacons_place_hierarchy.raml
+/beacons:
+  get:
+    description: Get All Beacon
+    responses:
+      200:
+        body:
+          application/json:
+            type: beacon[]
+            example: !include examples/json_files/beacons.json
+  /{id_organization}:
+    get:
+      description: Get All Beacon by Organization
+      responses:
+        200:
+          body:
+            application/json:
+              type: beacon[]
+              example: !include examples/json_files/beacons.json
+    /{id_beacon}:
+      get:
+        description: Get a Beacon
+        responses:
+          200:
+            body:
+              application/json:
+                type: beacon
+                example: !include examples/json_files/beacon.json
+      put:
+        description: Update a Beacon
+        body:
+          application/json:
+            type: !include resourceTypes/beacon_put.raml
+            example: !include examples/json_files/beacon_put.json
+        responses: 
+          200:
+            body: 
+              application/json:
+                example: !include examples/response_files/beacon_updated.json     
+    /type:
+      get:
+        description: Get All Beacons Types
+        responses:
+          200:
+            body:
+              application/json:
+                type: beaconType[]
+                example: !include examples/json_files/beaconTypes.json
+      post:
+        description: Register a Beacon Type
+        body:
+          application/json:
+            type: !include resourceTypes/beacon_type_post.raml
+            example: !include examples/json_files/beacon_type_post.json
+        responses: 
+           201:
+             body: 
+               application/json:
+                 example: !include examples/response_files/registered_beacon_type.json      
+      /{id_beacon_type}:
+        get:
+          description: Get a Beacon Type
+          responses:
+            200:
+              body:
+                application/json:
+                  type: beaconType
+                  example: !include examples/json_files/beaconType.json
+        put:
+          description: Update a Beacon Type
+          body:
+            application/json:
+              type: !include resourceTypes/beacon_type.raml
+              example: !include examples/json_files/beaconType.json
+          responses: 
+            200:
+              body: 
+                application/json:
+                  example: !include examples/response_files/beacon_type_updated.json 
+    /hierarchy:
+      post:
+        description: Register a Beacon Type
+        body:
+          application/json:
+            type: !include resourceTypes/beacon_hierarchy_post.raml
+            example: !include examples/json_files/beacon_hierarchy_post.json
+        responses: 
+          201:
+            body: 
+              application/json:
+                example: !include examples/response_files/registered_beacon_hierarchy.json    
+      get:
+        description: Get All Beacons Hierarchies
+        responses:
+          200:
+            body:
+              application/json:
+                type: beaconHierarchy[]
+                example: !include examples/json_files/beaconHierarchies.json
+      /{id_beacon_hierarchy}:
+        get:
+          description: Get a Beacon Hierarchy
+          responses:
+            200:
+              body:
+                application/json:
+                  type: beaconHierarchy
+                  example: !include examples/json_files/beaconHierarchy.json
+        put:
+          description: Update a Beacon Hierarchy
+          body:
+            application/json:
+              type: !include resourceTypes/beacon_hierarchy.raml
+              example: !include examples/json_files/beaconHierarchy.json
+          responses:
+            200:
+              body:
+                application/json:
+                  example: !include examples/response_files/beacon_hierarchy_updated.json    
+    /place_hierarchy:
+      get:
+        description: Get All Beacons Place Hierarchy
+        responses:
+          200:
+            body:
+              application/json:
+                type: beaconsPlacesHierarchy
+                example: !include examples/json_files/beaconsPlaceHierarchy.json       
+      put:
+        description: Update a Beacon Place Hierarchy
+        queryParameters: 
+          operation:
+            type: string
+            description: Type operation to trigger stored procedure
+            enum: [update_place_hierarchy, update_beacon_hierarchy]
+            required: true
+          id:
+            type: integer
+            description: Id of the object to be updated
+            required: true 
+        body:
+          application/json:
+            type: !include resourceTypes/beacon_place_hierarchy_put.raml
+            example: !include examples/json_files/beaconPlaceHierarchy.json
+        responses: 
+          200:
+            body: 
+              application/json:
+                example: !include examples/response_files/beacon_place_hierarchy_updated.json

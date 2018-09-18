@@ -1,0 +1,22 @@
+[
+  {
+    "beacon_type": "Advertisement Pusher",
+    "id_beacon_type": 1,
+    "beacon_hierarchy": "Front Store",
+    "name": "Blue-Bird",
+    "id_beacon_hierarchy": 1,
+    "broadcast_url": "www.url.com",
+    "id_organization": "93AB2E19-1057-4EF3-9856-5089FB5E6628",
+    "id": 1
+  },
+  {
+    "beacon_type": "Point Catcher",
+    "id_beacon_type": 2,
+    "beacon_hierarchy": "Rack 1",
+    "name": "Jade",
+    "id_beacon_hierarchy": 2,
+    "broadcast_url": "www.url.com",
+    "id_organization": "93AB2E19-1057-4EF3-9856-5089FB5E6628",
+    "id": 2
+  }
+]
