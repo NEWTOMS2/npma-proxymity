@@ -1,0 +1,31 @@
+{
+  "configs": [
+    "api.xml",
+    "global-configuration.xml"
+  ],
+  "secureProperties": [],
+  "redeploymentEnabled": true,
+  "name": "com.mycompany:npma-orgaization-experience-api:1.0.0-SNAPSHOT",
+  "minMuleVersion": "4.1.2",
+  "requiredProduct": "MULE",
+  "classLoaderModelLoaderDescriptor": {
+    "id": "mule",
+    "attributes": {
+      "exportedPackages": [],
+      "exportedResources": [
+        "api/api.raml",
+        "api/examples/json_files/organization.json",
+        "api/examples/json_files/organizations.json",
+        "api/examples/json_files/responses/organization_created.json",
+        "api/examples/json_files/responses/organization_updated.json",
+        "beacons-DEV.yaml",
+        "beacons-PRO.yaml",
+        "log4j2.xml"
+      ]
+    }
+  },
+  "bundleDescriptorLoader": {
+    "id": "mule",
+    "attributes": {}
+  }
+}

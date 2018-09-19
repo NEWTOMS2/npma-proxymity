@@ -1,0 +1,50 @@
+#%RAML 1.0
+version: v1
+title: Organization Process API
+types: 
+  Organization:
+    type: object
+    properties: 
+      id?: string
+      name: string
+/organizations:
+  get:
+    description: Get all organizations
+    responses: 
+      200:
+        body: 
+          application/json:
+            type: Organization[]
+            example: !include examples/json_files/organizations.json
+  post:
+    description: Create a new organization
+    body: 
+      application/json:
+        type: Organization
+        example: !include examples/json_files/organization.json
+    responses: 
+      200:
+        body: 
+          application/json:
+            example: !include examples/json_files/responses/organization_created.json
+  /{id_organization}:
+    get:
+      description: Get a organization by Id
+      responses: 
+        200:
+          body: 
+            application/json:
+              type: Organization
+              example: !include examples/json_files/organization.json
+    put:
+      description: Update an organization
+      body: 
+        application/json:
+          type: Organization
+          example: !include examples/json_files/organization.json
+      responses: 
+        200:
+          body: 
+            application/json:
+              example: !include examples/json_files/responses/organization_updated.json
+  

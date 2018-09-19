@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<global-property doc:name="Global Property" doc:id="daa8006b-737e-4ea8-b58f-825f92d89763" doc:description="env = DEV" name="env" value="DEV" />
+	<configuration-properties doc:name="Configuration properties" doc:id="7228cd92-888d-45e7-be50-91413466d46c" file="beacons-${env}.yaml" />
+	<http:listener-config name="Organization_HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="be9541c6-3d93-4330-b0fd-629d209e975b" >
+		<http:listener-connection host="${http.experience.host}" port="${http.experience.port}" />
+	</http:listener-config>
+</mule>
