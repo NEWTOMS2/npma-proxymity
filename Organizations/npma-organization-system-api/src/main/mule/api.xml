@@ -198,17 +198,7 @@ output application/json
 	}
 ]]]></db:input-parameters>
 		</db:stored-procedure>
-		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  id: "ECB11EDB-3860-4733-9096-DC67FEDAD127",
-  name: "Food Stored"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="serialize_result_set" doc:id="44e621ed-0dba-48df-9149-e1e2b8c61694" name="serialize_result_set"/>
     </flow>
     <flow name="post:\organizations:application\json:api-config">
 		<ee:transform doc:name="Transform Message" doc:id="b841120d-a384-44dc-9d0d-4b370c496665" >

@@ -1,0 +1,32 @@
+  [
+    {
+    "id": "ECB11EDB-3860-4733-9096-DC67FEDAD127",
+    "id_organization": "ECB11EDB-3860-4733-9096-DC67FEDAD127",
+    "organization": "Food Store",
+    "username": "userdemo",
+    "firstname": "Jhon",
+    "lastname": "Doe",
+    "password": "hallo!demo01",
+    "email": "jhondoe@foo.com"
+  },
+      {
+    "id": "ECB11EDB-3860-4733-9096-DC67FEDAD127",
+    "id_organization": "ECB11EDB-3860-4733-9096-DC67FEDAD127",
+    "organization": "Clothing Store",
+    "username": "userdemo",
+    "firstname": "Jhon",
+    "lastname": "Doe",
+    "password": "hallo!demo01",
+    "email": "jhondoe@foo.com"
+  },
+      {
+    "id": "ECB11EDB-3860-4733-9096-DC67FEDAD127",
+    "id_organization": "ECB11EDB-3860-4733-9096-DC67FEDAD127",
+    "organization": "Pet Shop",
+    "username": "userdemo",
+    "firstname": "Jhon",
+    "lastname": "Doe",
+    "password": "hallo!demo01",
+    "email": "jhondoe@foo.com"
+  }
+  ]
