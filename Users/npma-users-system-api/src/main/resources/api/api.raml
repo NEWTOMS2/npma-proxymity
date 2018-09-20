@@ -7,12 +7,23 @@ types:
     properties: 
       id?: string
       id_organization: string
-      organization?: string
-      username: string
-      firstname: string
-      lastname: string
-      password: string
+      id_role: integer
+      user_name: string
+      first_name: string
+      last_name: string
       email: string
+      password: string
+      active?: boolean
+  Users:
+    type: object
+    properties: 
+      id_user: string
+      user_name: string
+      email: string
+      id_organization: string
+      organization_name: string
+      id_role: integer
+      role: string
   userAccess:
    type: object
    properties:
@@ -31,7 +42,7 @@ types:
 /users:
   get:
     queryParameters:
-      id_organitacion?: 
+      id_organization?: 
         type: string
         description: Fecth users by organization (Filter)
     description: Get all users from
@@ -39,14 +50,14 @@ types:
       200:
         body: 
           application/json:
-            type: User[]
+            type: Users[]
             example: !include examples/json_files/users.json
   post:
     description: Create a new user
     body: 
       application/json:
         type: User
-        example: !include examples/json_files/user.json
+        example: !include examples/json_files/user_post.json
     responses: 
       200:
         body: 
@@ -78,6 +89,11 @@ types:
         application/json:
           type: userAccess
           example: !include examples/json_files/user_access.json
+      responses: 
+        200:
+          body: 
+            application/json:
+              example: !include examples/json_files/user_access_response.json
   /roles:
     get:
       description: Get all users roles
@@ -114,7 +130,7 @@ types:
             type: userRole
             example: !include examples/json_files/user_role.json
         responses: 
-          204:
+          200:
             body: 
               application/json:
                 example: !include examples/json_files/responses/user_role_created.json
