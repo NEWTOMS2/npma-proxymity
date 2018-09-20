@@ -1,0 +1,121 @@
+#%RAML 1.0
+version: v1
+title: Users Process API
+types: 
+  User:
+    type: object
+    properties: 
+      id?: string
+      id_organization: string
+      organization?: string
+      username: string
+      firstname: string
+      lastname: string
+      password: string
+      email: string
+  userAccess:
+   type: object
+   properties:
+    username: 
+      type: string
+      required: true
+    password: 
+      type: string
+      required: true
+  userRole:
+    type: object
+    properties: 
+      id?: integer
+      name: string
+        
+/users:
+  get:
+    queryParameters:
+      id_organitacion?: 
+        type: string
+        description: Fecth users by organization (Filter)
+    description: Get all users from
+    responses: 
+      200:
+        body: 
+          application/json:
+            type: User[]
+            example: !include examples/json_files/users.json
+  post:
+    description: Create a new user
+    body: 
+      application/json:
+        type: User
+        example: !include examples/json_files/user.json
+    responses: 
+      200:
+        body: 
+          application/json:
+            example: !include examples/json_files/responses/user_created.json
+  /{id_user}:
+    get:
+      description: Get an users by Id
+      responses: 
+        200:
+          body: 
+            application/json:
+              type: User
+              example: !include examples/json_files/user.json
+    put:
+      description: Update a user
+      body: 
+        application/json:
+          type: User
+          example: !include examples/json_files/user.json
+      responses: 
+        200:
+          body: 
+            application/json:
+              example: !include examples/json_files/responses/user_updated.json
+  /access:
+    post:
+      body: 
+        application/json:
+          type: userAccess
+          example: !include examples/json_files/user_access.json
+  /roles:
+    get:
+      description: Get all users roles
+      responses: 
+        200:
+          body: 
+            application/json:
+              type: userRole[]
+              example: !include examples/json_files/user_roles.json
+    post:
+      description: Created a new user role
+      body: 
+        application/json:
+          type: userRole
+          example: !include examples/json_files/user_role.json
+      responses: 
+        201:
+          body: 
+            application/json:
+              example: !include examples/json_files/responses/user_role_created.json
+    /{id_user_role}:
+      get:
+        description: Get an user role by Id
+        responses: 
+          200:
+            body: 
+              application/json:
+                type: userRole
+                example: !include examples/json_files/user_role.json
+      put:
+        description: Update an user role by Id
+        body: 
+          application/json:
+            type: userRole
+            example: !include examples/json_files/user_role.json
+        responses: 
+          204:
+            body: 
+              application/json:
+                example: !include examples/json_files/responses/user_role_created.json
+    

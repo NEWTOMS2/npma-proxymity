@@ -1,0 +1,39 @@
+{
+  "configs": [
+    "user-manager.xml",
+    "experience-api-main.xml",
+    "global-configuration.xml"
+  ],
+  "secureProperties": [],
+  "redeploymentEnabled": true,
+  "name": "com.mycompany:npma-user-experience-api:1.0.0-SNAPSHOT",
+  "minMuleVersion": "4.1.2",
+  "requiredProduct": "MULE",
+  "classLoaderModelLoaderDescriptor": {
+    "id": "mule",
+    "attributes": {
+      "exportedPackages": [],
+      "exportedResources": [
+        "api/api.raml",
+        "api/examples/json_files/responses/user_created.json",
+        "api/examples/json_files/responses/user_role_created.json",
+        "api/examples/json_files/responses/user_role_updated.json",
+        "api/examples/json_files/responses/user_updated.json",
+        "api/examples/json_files/user.json",
+        "api/examples/json_files/users.json",
+        "api/examples/json_files/user_access.json",
+        "api/examples/json_files/user_access_response.json",
+        "api/examples/json_files/user_post.json",
+        "api/examples/json_files/user_role.json",
+        "api/examples/json_files/user_roles.json",
+        "beacons-DEV.yaml",
+        "beacons-PRO.yaml",
+        "log4j2.xml"
+      ]
+    }
+  },
+  "bundleDescriptorLoader": {
+    "id": "mule",
+    "attributes": {}
+  }
+}
