@@ -6,7 +6,7 @@ http:
     host: "localhost"
     port: "8082"
   system:
-    host: "http://npma-users-system-api.us-e1.cloudhub.io"
+    host: "npma-users-system-api.us-e1.cloudhub.io"
     port: "80"  
 db:
   sqlserver:
