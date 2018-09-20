@@ -8,7 +8,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
 	<validation:config name="Validation_Config" doc:name="Validation Config" doc:id="c699b4f9-f21b-426f-8755-f0f3b9e0e119" />
 	<flow name="update-user-role-flow" doc:id="51d8b84a-8e03-4f71-9a82-3a1dac5a456e" >
-		<http:request method="GET" doc:name="Request" doc:id="962e25a0-0619-4918-a96d-50a47852f57e" config-ref="User_HTTP_Request_configuration" path="/users/roles/{id_user_role}">
+		<http:request method="PUT" doc:name="Request" doc:id="962e25a0-0619-4918-a96d-50a47852f57e" config-ref="User_HTTP_Request_configuration" path="/users/roles/{id_user_role}">
 			<http:uri-params><![CDATA[#[output application/java
 ---
 {
