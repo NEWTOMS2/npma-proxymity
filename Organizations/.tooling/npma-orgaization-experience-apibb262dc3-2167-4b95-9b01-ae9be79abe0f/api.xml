@@ -170,6 +170,7 @@ output application/json
                 <ee:set-variable variableName="id_organization">attributes.uriParams.id_organization</ee:set-variable>
             </ee:variables>
         </ee:transform>
+<<<<<<< HEAD:Organizations/.tooling/npma-orgaization-experience-apibb262dc3-2167-4b95-9b01-ae9be79abe0f/api.xml
         <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
@@ -181,6 +182,17 @@ output application/json
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
+=======
+        <db:stored-procedure doc:name="fecthOrganizationById" doc:id="5c1529ac-ff7c-4fa2-a925-0aa6ed01a6ae" config-ref="Database_Config">
+			<db:sql >{CALL fecthOrganizationById(:id)}</db:sql>
+			<db:input-parameters ><![CDATA[#[
+	{
+		'id': vars.id_organization
+	}
+]]]></db:input-parameters>
+		</db:stored-procedure>
+		<flow-ref doc:name="serialize_result_set" doc:id="44e621ed-0dba-48df-9149-e1e2b8c61694" name="serialize_result_set"/>
+>>>>>>> feature/users/system_api:Organizations/npma-organization-system-api/src/main/mule/api.xml
     </flow>
     <flow name="post:\organizations:application\json:api-config">
         <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">

@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd  http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+    <http:listener-config name="api-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8081" />
+    </http:listener-config>
+    <apikit:config name="api-config" raml="api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <flow name="api-main">
+        <http:listener config-ref="api-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="api-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:BAD_REQUEST">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Bad request"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">400</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Method not allowed"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not acceptable"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Unsupported media type"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not Implemented"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="api-console">
+        <http:listener config-ref="api-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="api-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="put:\users\(id_user):application\json:api-config">
+        <ee:transform doc:id="184acafa-efd2-4888-a548-84fafbc253fe">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output text/json
+fun booleanToBinary(boolean)
+= if (boolean == true) 1 else 0
+---
+write({
+	id: payload.id,
+	user_name: payload.user_name,
+	first_name: payload.first_name,
+	last_name: payload.last_name,
+	password: payload.password,
+	email: payload.email,
+	active: booleanToBinary(payload.active),
+	id_organization: payload.id_organization,
+	id_role: payload.id_role
+},"aplication/json")]]></ee:set-payload>
+            </ee:message>
+            <ee:variables>
+                <ee:set-variable variableName="id_user"><![CDATA[attributes.uriParams.id_user]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <db:stored-procedure doc:name="updateUser" doc:id="4a30eba0-20e3-45e6-bbd2-a17a27857a0d" config-ref="Database_Config">
+            <db:sql>{CALL updateUser(:json)}</db:sql>
+            <db:input-parameters><![CDATA[#[
+	{
+		'json': payload as String
+	}
+]]]></db:input-parameters>
+        </db:stored-procedure>
+        <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  status: true,
+  message: "a user has been updated"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="get:\users\roles:api-config">
+		<db:stored-procedure doc:name="fecthAllRoles" doc:id="4f506fec-925a-4a67-b7c8-208c5a866edd" config-ref="Database_Config">
+            <db:sql>{CALL fecthAllRoles}</db:sql>
+        </db:stored-procedure>
+        <flow-ref doc:name="serialize_result_set" doc:id="f431bbe7-b4e7-4b43-8b4d-4444d09164be" name="serialize_result_set" />
+    </flow>
+    <flow name="get:\users:api-config">
+        <ee:transform doc:name="Transform Message" doc:id="67088316-cf23-4ce9-a3c6-3580a201bc18" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="id_orgnization" ><![CDATA[attributes.queryParams.id_organization]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<choice doc:name="Choice" doc:id="43c15710-0b35-4d64-9c5d-2f9397bdc3f3" >
+			<when expression="#[vars.id_orgnization != null]" >
+				<db:stored-procedure doc:name="fecthAllUsersByOrganization" doc:id="37e13754-65ca-46f4-b8cb-c243f93b8ec6" config-ref="Database_Config">
+					<db:sql >{CALL fecthAllUsersByOrganization(:idOrganization)}</db:sql>
+					<db:input-parameters ><![CDATA[#[
+	{
+		'idOrganization':  vars.id_orgnization
+	}
+]]]></db:input-parameters>
+				</db:stored-procedure>
+				<flow-ref doc:name="serialize_result_set" doc:id="5c422666-98f8-4f33-868f-6abbbd9a693a" name="serialize_result_set" />
+			</when>
+			<otherwise >
+				<db:stored-procedure doc:name="fecthAllUsers" doc:id="3585a3f7-1f6c-42cd-8a44-4218e6592206" config-ref="Database_Config">
+            <db:sql>{CALL fecthAllUsers}</db:sql>
+        </db:stored-procedure>
+				<flow-ref doc:name="serialize_result_set" doc:id="46d61385-e6da-4ad1-93f0-670df9067d8f" name="serialize_result_set"/>
+			</otherwise>
+		</choice>
+    </flow>
+    <flow name="get:\users\roles\(id_user_role):api-config">
+        <ee:transform doc:id="d18eaa25-d294-44b7-be61-386323165e73">
+            <ee:variables>
+                <ee:set-variable variableName="id_user_role"><![CDATA[attributes.uriParams.id_user_role]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <db:stored-procedure doc:name="fecthRoleById" doc:id="1af10486-4138-45f8-b0e3-b3beb9d82b1f" config-ref="Database_Config">
+            <db:sql>{CALL fecthRoleById(:id)}</db:sql>
+            <db:input-parameters><![CDATA[#[
+	{
+		'id': vars.id_user_role
+	}
+]]]></db:input-parameters>
+        </db:stored-procedure>
+        <flow-ref doc:name="serialize_result_set" doc:id="39744719-33df-4bf8-a0a5-11ce14cc2517" name="serialize_result_set" />
+    </flow>
+    <flow name="get:\users\(id_user):api-config">
+        <ee:transform doc:id="cf025955-125c-408e-8bc6-0c0cfecee3b8">
+            <ee:variables>
+                <ee:set-variable variableName="id_user"><![CDATA[attributes.uriParams.id_user]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <db:stored-procedure doc:name="fecthUserById" doc:id="ab93143f-5322-4e70-93c1-bb5328d439b7" config-ref="Database_Config">
+            <db:sql>{CALL fecthUserById(:id)}</db:sql>
+            <db:input-parameters><![CDATA[#[
+	{
+		'id': attributes.uriParams.id_user
+	}
+]]]></db:input-parameters>
+        </db:stored-procedure>
+        <flow-ref doc:name="serialize_result_set" doc:id="73231a53-99f2-474e-a0d4-2d7175d13d9f" name="serialize_result_set" />
+    </flow>
+    <flow name="post:\users\access:application\json:api-config">
+        <ee:transform doc:name="Transform Message" doc:id="bcb05c44-3110-457f-a822-97eb862fb1d2">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output text/json
+---
+write(payload,"aplication/json")]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <db:stored-procedure doc:name="validatedUserAccess" doc:id="338f741e-ecf5-4e25-98de-bf6e09ee2355" config-ref="Database_Config">
+            <db:sql>{CALL validatedUserAccess(:json)}</db:sql>
+            <db:input-parameters><![CDATA[#[
+	{
+		'json': payload as String
+	}
+]]]></db:input-parameters>
+        </db:stored-procedure>
+        <logger level="INFO" doc:name="Logger" doc:id="240fde49-78bc-47bb-83af-2cff9b0dcb7d" message="#[payload]" />
+        <flow-ref doc:name="serialize_result_set" doc:id="8e355981-f2bb-4017-b5a9-70e7ccbdcc76" name="serialize_result_set" />
+    </flow>
+    <flow name="post:\users\roles:application\json:api-config">
+        <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="80757313-12db-4716-92f1-bf4778a91fad">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output text/json
+---
+write(payload,"aplication/json")]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <db:stored-procedure doc:name="insertRoles" doc:id="81b7c1d6-0967-4992-9b70-d9c2e90c3bb5" config-ref="Database_Config">
+            <db:sql>{CALL insertRoles(:json)}</db:sql>
+            <db:input-parameters><![CDATA[#[
+	{
+		'json': payload as String
+	}
+]]]></db:input-parameters>
+        </db:stored-procedure>
+        <ee:transform doc:name="Transform Message" doc:id="d2f39cf1-9928-43dc-a8a3-02524e0c14ca">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "status": true,
+  "message": "a new user role has been created"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="post:\users:application\json:api-config">
+        <ee:transform doc:name="Transform Message" doc:id="02450da0-5e49-4e7b-b4cc-4daa02446168">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output text/json
+fun booleanToBinary(boolean)
+= if (boolean == true) 1 else 0
+---
+write({
+	user_name: payload.user_name,
+	first_name: payload.first_name,
+	last_name: payload.last_name,
+	password: payload.password,
+	email: payload.email,
+	active: booleanToBinary(payload.active),
+	id_organization: payload.id_organization,
+	id_role: payload.id_role
+},"aplication/json")]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <db:stored-procedure doc:name="insertUser" doc:id="91cb418d-0bd7-494b-84bd-7629fd29b529" config-ref="Database_Config">
+            <db:sql>{CALL insertUser(:json)}</db:sql>
+            <db:input-parameters><![CDATA[#[
+	{
+		'json': payload as String
+	}
+]]]></db:input-parameters>
+        </db:stored-procedure>
+        <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  status: true,
+  message: "a new user has been created"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="put:\users\roles\(id_user_role):application\json:api-config">
+        <ee:transform doc:id="e15fd47f-714a-4eef-9912-7d4e7b0db9e8">
+            <ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output text/json
+---
+write(payload,"aplication/json")]]></ee:set-payload>
+			</ee:message>
+			<ee:variables>
+                <ee:set-variable variableName="id_user_role"><![CDATA[attributes.uriParams.id_user_role]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <db:stored-procedure doc:name="updateRole" doc:id="90e313d8-b5fa-466b-9807-3791281037fa" config-ref="Database_Config">
+			<db:sql >{CALL updateRole(:json)}</db:sql>
+			<db:input-parameters ><![CDATA[#[
+	{
+		'json': payload as String
+	}
+]]]></db:input-parameters>
+		</db:stored-procedure>
+		<ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="2956b3a2-6394-446e-962a-16acd8f8231c">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  status: true,
+  message: "a new user role has been updated"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+</mule>
