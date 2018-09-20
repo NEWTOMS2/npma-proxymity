@@ -62,12 +62,20 @@ http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mu
 		<http:request method="POST" doc:name="Request" doc:id="cd7e9f90-e548-4f6e-a7c3-4cf62042e4ba" config-ref="User_HTTP_Request_configuration" path="/users"/>
 	</flow>
 	<flow name="get-all-users-flow" doc:id="c38668b4-c8ab-4c09-a752-5a5e0c783e53" >
-		<http:request method="GET" doc:name="Request" doc:id="11059e42-2ec5-4a3c-aa34-30cfb45b760a" config-ref="User_HTTP_Request_configuration" path="/users">
+		<choice doc:name="Choice" doc:id="56b6ec2e-4920-4343-9335-420cce46133c" >
+			<when expression="attributes.queryParams.id_organization != null">
+				<http:request method="GET" doc:name="Request" doc:id="11059e42-2ec5-4a3c-aa34-30cfb45b760a" config-ref="User_HTTP_Request_configuration" path="/users">
 			<http:query-params><![CDATA[#[output application/java
 ---
 {
-	"id_organization?" : attributes.queryParams.id_organization
+	"id_organization" : attributes.queryParams.id_organization
 }]]]></http:query-params>
 		</http:request>
+			</when>
+			<otherwise >
+				<http:request method="GET" doc:name="Request" doc:id="85946437-49b6-4280-8963-c0cdd14467fc" config-ref="User_HTTP_Request_configuration" path="/users" >
+				</http:request>
+			</otherwise>
+		</choice>
 	</flow>
 </mule>

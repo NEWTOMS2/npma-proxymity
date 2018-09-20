@@ -39,6 +39,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 		</http:request>
 	</flow>
 	<flow name="validate-credentials-flow" doc:id="edf3d6b8-bcc8-4d1e-854c-799b500dc301" >
+		<validation:validate-size doc:name="Validate size" doc:id="1ebaae37-0e36-48da-9671-1aa6723d117a" />
 		<http:request method="POST" doc:name="Request" doc:id="33a0c39c-f017-415e-82d7-1dc0e3e9467e" config-ref="User_HTTP_Request_configuration" path="/users/access"/>
 	</flow>
 	<flow name="update-user-flow" doc:id="d23181c9-96b1-46e3-823a-de4fd86e6e70" >

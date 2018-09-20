@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="access" format="json">
+      <types:shape format="weave" example="api/examples/json_files/user_access.json"><![CDATA[%dw 2.0
+type access = {|
+  username: String, 
+  password: String
+|} {"MetadataFormat": "json",
+"example": "{\"username\":\"demouser\",\"password\":\"hallo!demo05\"}"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+</types:mule>
