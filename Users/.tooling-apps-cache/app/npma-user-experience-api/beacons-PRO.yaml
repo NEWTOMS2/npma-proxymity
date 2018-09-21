@@ -1,10 +1,10 @@
 http:
   experience:
-    host: "localhost"
+    host: "0.0.0.0"
     port: "8081"
   process:
-    host: "localhost"
-    port: "8082"
+    host: "npma-user-process-api.us-e1.cloudhub.io"
+    port: "80"
   system:
     host: "npma-users-system-api.us-e1.cloudhub.io"
     port: "80"  
@@ -15,3 +15,4 @@ db:
     user: "sa"
     password: "SeyHhv&XT8.FCY#h"
     dbname: "Beacons_Proximity"
+    

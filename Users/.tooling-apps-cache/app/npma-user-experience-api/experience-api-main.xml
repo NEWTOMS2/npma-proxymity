@@ -117,30 +117,30 @@ output application/json
         </error-handler>
     </flow>
     <flow name="put:\users\roles\(id_user_role):application\json:api-config">
-		<flow-ref doc:name="update-user-role-flow" doc:id="1c24caa4-86ab-493f-bbe9-1b5f086e270c" name="update-user-role-flow" />
+        <flow-ref doc:name="update-user-role-flow" doc:id="fa015e75-5e5c-4d74-a20a-bbd8828ba467" name="update-user-role-flow" />
     </flow>
     <flow name="put:\users\(id_user):application\json:api-config">
-        <flow-ref doc:name="update-user-flow" doc:id="228779f1-42f6-458e-ba7f-48ea1b462b9d" name="update-user-flow" />
+        <flow-ref doc:name="update-user-flow" doc:id="6009a53c-67ba-4582-96f9-d5cc6d2d4cb3" name="update-user-flow" />
     </flow>
     <flow name="get:\users\roles:api-config">
-		<flow-ref doc:name="get-users-roles-flow" doc:id="ef79265b-f88f-4e70-8676-613721b9a2a6" name="get-users-roles-flow" />
+		<flow-ref doc:name="get-users-roles-flow" doc:id="367b35c3-edda-440f-a5c2-cec1d4ad4f07" name="get-users-roles-flow" />
     </flow>
     <flow name="get:\users:api-config">
-		<flow-ref doc:name="get-all-users-flow" doc:id="b84850ab-f90d-4f53-ae08-a0a5ec1cfdaa" name="get-all-users-flow" />
+		<flow-ref doc:name="get-all-users-flow" doc:id="bd08ee64-6e37-4ac7-a5c3-a93a179a7c12" name="get-all-users-flow" />
     </flow>
     <flow name="get:\users\roles\(id_user_role):api-config">
-		<flow-ref doc:name="get-user-role-flow" doc:id="2643e098-701d-4e1e-8206-750c6ce075e4" name="get-user-role-flow" />
+        <flow-ref doc:name="get-user-role-flow" doc:id="4523c009-ca9d-497c-b668-6a25a34ad6cd" name="get-user-role-flow" />
     </flow>
     <flow name="get:\users\(id_user):api-config">
-        <flow-ref doc:name="get-user-by-id-flow" doc:id="ece31069-2212-428b-9388-8e24ee230485" name="get-user-by-id-flow" />
+        <flow-ref doc:name="get-user-by-id-flow" doc:id="a7a1e773-35c4-4eba-9b6e-ffba5a707d52" name="get-user-by-id-flow" />
     </flow>
     <flow name="post:\users\access:application\json:api-config">
-		<flow-ref doc:name="validate-credentials-flow" doc:id="3ca2508f-00b9-4d7e-b240-a721eedaa091" name="validate-credentials-flow" />
+		<flow-ref doc:name="validate-credentials-flow" doc:id="f428be89-1fd0-473a-8d02-6e5dd17496ba" name="validate-credentials-flow" />
     </flow>
     <flow name="post:\users\roles:application\json:api-config">
-		<flow-ref doc:name="create-user-role-flow" doc:id="3136df2b-0a27-414e-a32e-75ece12bb300" name="create-user-role-flow" />
+		<flow-ref doc:name="create-user-role-flow" doc:id="0a69419a-6909-4fba-a69d-171bbac3a3ea" name="create-user-role-flow" />
     </flow>
     <flow name="post:\users:application\json:api-config">
-		<flow-ref doc:name="create-user-flow" doc:id="4e3bb088-e594-4c1d-a8a6-dc1383477f69" name="create-user-flow" />
+		<flow-ref doc:name="create-user-flow" doc:id="a7309ac0-8cdf-4021-b2b5-b5b182d2c8e2" name="create-user-flow" />
     </flow>
 </mule>
