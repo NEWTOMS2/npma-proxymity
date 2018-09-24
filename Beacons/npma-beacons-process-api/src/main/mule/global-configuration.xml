@@ -4,7 +4,7 @@
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
-	<global-property doc:name="Global Property" doc:id="b2ea517a-0e35-4616-bf91-71739fa58f8b" name="env" value="PRO" doc:description="env = PRO"/>
+	<global-property doc:name="Global Property" doc:id="b2ea517a-0e35-4616-bf91-71739fa58f8b" name="env" value="DEV" doc:description="env = DEV"/>
 	<configuration-properties doc:name="Configuration properties" doc:id="ee9efcae-18e4-4529-ab3f-adbc7ceaed5c" file="beacons-${env}.yaml" />
 	<http:listener-config name="Beacons_HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="a4e084b9-5514-4ba6-ae1e-aa6e14bad98a" >
 		<http:listener-connection host="0.0.0.0" port="${http.process.port}" />

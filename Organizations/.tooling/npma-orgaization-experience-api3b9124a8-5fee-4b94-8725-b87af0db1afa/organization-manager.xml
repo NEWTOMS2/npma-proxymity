@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="create-organization-flow" doc:id="b228d017-ab45-4be9-a568-9042860f306d" >
+		<http:request method="POST" doc:name="Request" doc:id="f9744bb6-93b3-4deb-bc9c-8ccad6b63682" config-ref="HTTP_Request_configuration" path="/api/organizations"/>
+	</flow>
+	<flow name="get-organizations-flow" doc:id="d69a0637-1742-4abb-ba2b-98a0685dadef">
+		<http:request method="GET" doc:name="Request" doc:id="0d904089-3a82-4cc8-8bbd-8f8be1e5c9ee" config-ref="HTTP_Request_configuration" path="/api/organizations"/>
+	</flow>
+	<flow name="get-organization-flow" doc:id="69e36d29-353f-4520-a569-1382d044b98f" >
+		<http:request method="GET" doc:name="Request" doc:id="0d3b424d-c351-4367-9cea-11b0a0c16cd0" config-ref="HTTP_Request_configuration" path="/api/organizations/{id_organization}">
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="update-organization-flow" doc:id="d63fd2fa-8e38-44a7-ab99-6e48a432e52b" >
+		<http:request method="PUT" doc:name="Request" doc:id="7a6b647d-3b65-4232-a3cd-b76325e8b04e" config-ref="HTTP_Request_configuration" path="/api/organizations/{id_organization}">
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+</mule>

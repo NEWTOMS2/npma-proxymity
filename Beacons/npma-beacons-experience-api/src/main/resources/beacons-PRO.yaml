@@ -1,7 +1,7 @@
 http:
   experience:
     host: "0.0.0.0"
-    port: "8081"
+    port: "8082"
   process:
     host: "npma-beacons-process-api.us-e1.cloudhub.io"
     port: "80"
