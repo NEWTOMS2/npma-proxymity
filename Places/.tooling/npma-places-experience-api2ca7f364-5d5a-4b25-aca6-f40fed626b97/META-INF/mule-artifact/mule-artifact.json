@@ -1,0 +1,33 @@
+{
+  "configs": [
+    "api-main-experience.xml",
+    "places-manager.xml",
+    "global-configuration.xml"
+  ],
+  "secureProperties": [],
+  "redeploymentEnabled": true,
+  "name": "com.mycompany:npma_places_experience_api:1.0.0-SNAPSHOT",
+  "minMuleVersion": "4.1.2",
+  "requiredProduct": "MULE",
+  "classLoaderModelLoaderDescriptor": {
+    "id": "mule",
+    "attributes": {
+      "exportedPackages": [],
+      "exportedResources": [
+        "api/api.raml",
+        "api/examples/json_files/place.json",
+        "api/examples/json_files/places.json",
+        "api/examples/json_files/responses/place_created.json",
+        "api/examples/json_files/responses/place_updated.json",
+        "beacons-DEV.yaml",
+        "beacons-PRO.yaml",
+        "keystore.jks",
+        "log4j2.xml"
+      ]
+    }
+  },
+  "bundleDescriptorLoader": {
+    "id": "mule",
+    "attributes": {}
+  }
+}

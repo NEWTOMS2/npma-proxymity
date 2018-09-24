@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+	<validation:config name="Validation_Config" doc:name="Validation Config" doc:id="75ef3538-040f-4bb5-a213-adad01325355" i18n='#[attributes.queryParams.operation == "update_place_hierarchy"]' />
+	<flow name="update-beacon-place-hierarchy-flow" doc:id="e56bd441-5a37-4b51-84b4-be8f3e7172a3" >
+		<http:request method="PUT" doc:name="send data to process api" doc:id="054d2dbd-28ee-465d-8a0f-b31f9a79958f" config-ref="Beacons_HTTP_Request_configuration" path="/api/beacons/{id_organization}/place_hierarchy">
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization
+}]]]></http:uri-params>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"operation" : attributes.queryParams.operation,
+	"id" : attributes.queryParams.id
+}]]]></http:query-params>
+		</http:request>
+	</flow>
+	<flow name="update-beacon-hierarchy-flow" doc:id="17e3330f-d70f-49ca-881b-2805b093cd0b" >
+		<http:request method="PUT" doc:name="send data to process api" doc:id="ae360570-766b-4793-9193-3a04a5ab6e34" config-ref="Beacons_HTTP_Request_configuration" path="/api/beacons/{id_organization}/hierarchy/{id_beacon_hierarchy}">
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"id_beacon_hierarchy" : attributes.uriParams.id_beacon_hierarchy,
+	"id_organization" : attributes.uriParams.id_organization
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="update-beacon-type-flow" doc:id="b266851a-294a-442a-a1e8-73c4a7c5901d" >
+		<http:request method="PUT" doc:name="send data to process api" doc:id="e8a79c2e-8502-4967-82b2-7dc4c455951a" config-ref="Beacons_HTTP_Request_configuration" path="/api/beacons/{id_organization}/type/{id_beacon_type}">
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"id_beacon_type" : attributes.uriParams.id_beacon_type,
+	"id_organization" : attributes.uriParams.id_organization
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="update-beacon-flow" doc:id="2d51862d-28aa-4e64-8d06-3bb35482a9cc" >
+		<http:request method="PUT" doc:name="send data to process api" doc:id="7e3561ff-e312-4e94-9fdd-8e6a1eb726b8" config-ref="Beacons_HTTP_Request_configuration" path="/api/beacons/{id_organization}/{id_beacon}">
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"id_beacon" : attributes.uriParams.id_beacon,
+	"id_organization" : attributes.uriParams.id_organization
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+</mule>

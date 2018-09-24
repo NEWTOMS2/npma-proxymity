@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="register-beacon-flow" doc:id="f231e699-bfb3-4886-869a-0087e8c9de1c" >
+		<http:request method="POST" doc:name="send data to process api" doc:id="bd209d08-43ad-4df0-9dc4-3d58503bd1e5" config-ref="Beacons_HTTP_Request_configuration" path="/api/beacons/{id_organization}"/>
+	</flow>
+	<flow name="register-beacon-hierarchy-flow" doc:id="5e6a3cc7-7cfc-44b9-a771-2cdf5f93b63d" >
+		<http:request method="POST" doc:name="send data to process api" doc:id="a115ef62-49b3-4b7c-bf75-f5e3592ca706" config-ref="Beacons_HTTP_Request_configuration" path="/api/beacons/{id_organization}/hierarchy">
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="register-beacon-type-flow" doc:id="3a1aec09-ffd3-4610-a7f2-5d85f5fa55e9" >
+		<http:request method="POST" doc:name="send data to process api" doc:id="bae23fb7-a1cd-4d28-8e0c-0a99322f1ce2" config-ref="Beacons_HTTP_Request_configuration" path="/api/beacons/{id_organization}/type">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+</mule>
