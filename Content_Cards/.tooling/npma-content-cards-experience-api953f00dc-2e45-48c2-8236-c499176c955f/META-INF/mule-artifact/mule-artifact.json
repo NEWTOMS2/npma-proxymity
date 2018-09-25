@@ -1,0 +1,37 @@
+{
+  "configs": [
+    "content-cards-manager.xml",
+    "api.xml",
+    "global-configuration.xml"
+  ],
+  "secureProperties": [],
+  "redeploymentEnabled": true,
+  "name": "com.mycompany:npma-content-cards-experience-api:1.0.0-SNAPSHOT",
+  "minMuleVersion": "4.1.2",
+  "requiredProduct": "MULE_EE",
+  "classLoaderModelLoaderDescriptor": {
+    "id": "mule",
+    "attributes": {
+      "exportedPackages": [],
+      "exportedResources": [
+        "api/api.raml",
+        "api/examples/json_files/contentCardPost.json",
+        "api/examples/json_files/contentCardPut.json",
+        "api/examples/json_files/contentCards.json",
+        "api/examples/json_files/responses/contenCardUpdated.json",
+        "api/examples/json_files/responses/contentCardInserted.json",
+        "api/resourceTypes/contentCardPost.raml",
+        "api/resourceTypes/contentCardPut.raml",
+        "api/resourceTypes/contentCards.raml",
+        "beacons-DEV.yaml",
+        "beacons-PRO.yaml",
+        "keystore.jks",
+        "log4j2.xml"
+      ]
+    }
+  },
+  "bundleDescriptorLoader": {
+    "id": "mule",
+    "attributes": {}
+  }
+}

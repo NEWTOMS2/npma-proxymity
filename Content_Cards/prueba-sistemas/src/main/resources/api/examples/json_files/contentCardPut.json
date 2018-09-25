@@ -1,0 +1,22 @@
+{
+   "idCard":"417A7594-D19B-489A-A229-9E38C6D3CCFD",
+   "title":"Pharmacy Offers Card",
+   "idOrganization":"F025BEE7-57E1-451A-BC3B-CA09D177397F",
+   "idCardElements":"6039FECC-1D5B-43AC-A32C-D8098CAA2F96",
+   "showCardImage":true,
+   "imgUrl":"http:\/\/mallxplorer.com\/wp-content\/uploads\/2017\/07\/Aster-pharmacy-offer-J3-mall-dubai-UAE-600x500.jpg",
+   "showCardContent":true,
+   "htmlContent":"<h1>Is Time to go there&nbsp;<a href=\"https:\/\/twitter.com\/hashtag\/pharmacy?lang=es\" style=\"font-family: inherit; background-color: rgb(255, 255, 255); font-size: 14px;\">#Pharmacy<\/a><\/h1>",
+   "showCardActions":true,
+   "IdCardActions":"9C2EF9A9-BF8D-48C1-B096-5085A38287AC",
+   "actionButtons":true,
+   "actions":{
+      "buttons":[
+         {
+            "id":"6126088E-800F-4C22-90D1-0DD6331BCB48",
+            "actionLabel":"GET THERE",
+            "actionType":"Url"
+         }
+      ]
+   }
+}
