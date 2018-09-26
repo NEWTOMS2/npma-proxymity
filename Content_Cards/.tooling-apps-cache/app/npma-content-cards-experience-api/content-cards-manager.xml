@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="create-content-card-flow" doc:id="7ea91a17-00b6-423c-8761-48574d7140a8" >
+		<http:request method="POST" doc:name="POST:process-api/{id_organization}/content_cards" doc:id="c2dcd74c-7cde-4d84-8829-cb69c1de5adc" config-ref="Content_Cards_HTTP_Request_configuration" path="/{id_organization}/content_cards">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="get-content-card-flow" doc:id="1042939c-d543-4560-9bbb-04cec9987df8" >
+		<http:request method="GET" doc:name="GET:process-api/{id_organization}/content_cards/{id_content_card}" doc:id="76dfb6e5-c1e7-4270-b641-435cd85a31fb" config-ref="Content_Cards_HTTP_Request_configuration" path="/{id_organization}/content_cards/{id_content_card}">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization,
+	"id_content_card" : attributes.uriParams.id_content_card
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="get-content-cards-flow" doc:id="d85e71f0-48a5-4407-bc39-6be45cf97947" >
+		<http:request method="GET" doc:name="GET:process-api/{id_organization}/content_cards" doc:id="1c2d709c-0a28-425e-9855-6b0d7585b5fb" config-ref="Content_Cards_HTTP_Request_configuration" path="/{id_organization}/content_cards">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="update-content-card-flow" doc:id="a735dfb0-94aa-4c24-9408-54759b25651f" >
+		<http:request method="PUT" doc:name="PUT:process-api/{id_organization}/content_cards/{id_content_card}" doc:id="765bb9fb-cc28-4884-8aea-1c5de235bcc8" config-ref="Content_Cards_HTTP_Request_configuration" path="/{id_organization}/content_cards/{id_content_card}">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization,
+	"id_content_card" : attributes.uriParams.id_content_card
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+</mule>

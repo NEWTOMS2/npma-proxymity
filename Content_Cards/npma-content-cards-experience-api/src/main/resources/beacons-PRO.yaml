@@ -1,0 +1,18 @@
+http:
+  experience:
+    host: "0.0.0.0"
+    port: "8082"
+  process:
+    host: "npma-content-cards-process-api.us-e1.cloudhub.io"
+    port: "80"
+  system:
+    host: "npma-content-cards-system-api.us-e1.cloudhub.io"
+    port: "80"  
+db:
+  sqlserver:
+    host: "159.203.86.203"
+    port: "1433"
+    user: "sa"
+    password: "SeyHhv&XT8.FCY#h"
+    dbname: "Beacons_Proximity"
+    
