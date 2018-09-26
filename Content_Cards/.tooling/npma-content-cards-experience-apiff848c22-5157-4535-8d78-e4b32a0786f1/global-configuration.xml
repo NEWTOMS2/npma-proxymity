@@ -15,6 +15,9 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
 			<tls:context >
 				<tls:key-store type="jks" path="keystore.jks" keyPassword="password" password="password" />
 			</tls:context>
+			<tls:context >
+				<tls:key-store type="jks" path="keystore.jks" keyPassword="password" password="password" />
+			</tls:context>
 		</http:listener-connection>
 	</http:listener-config>
 </mule>

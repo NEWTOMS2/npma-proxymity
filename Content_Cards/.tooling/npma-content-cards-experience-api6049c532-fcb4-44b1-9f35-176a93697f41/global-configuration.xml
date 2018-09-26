@@ -10,7 +10,7 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
 	<http:request-config name="Content_Cards_HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="1d7c8972-0054-40bf-a143-5d5b8325afcc" basePath="/api" >
 		<http:request-connection host="${http.process.host}" port="${http.process.port}" />
 	</http:request-config>
-	<http:listener-config name="Content_cards_HTTPS_Listener_config" doc:name="HTTP Listener config" doc:id="4a092168-4211-4d36-a639-67e5da6b4d04" >
+	<http:listener-config name="Content_cards_HTTPS_Listener_config" doc:name="HTTP Listener config" doc:id="1dc651da-e2ea-4fa8-988b-e087fb775ab6" >
 		<http:listener-connection protocol="HTTPS" host="${http.experience.host}" port="${http.experience.port}" >
 			<tls:context >
 				<tls:key-store type="jks" path="keystore.jks" keyPassword="password" password="password" />

@@ -1,0 +1,45 @@
+#%RAML 1.0
+baseUri: https://mocksvc.mulesoft.com/mocks/96880fa8-2206-412a-b905-316daebe34d5/localhost # baseUri: https://mocksvc.mulesoft.com/mocks/bd0577bf-fcc0-474f-80f4-a7b7196da62c # 
+title: Content Card Experience API
+version: v1
+types: 
+  contentCards: !include resourceTypes/contentCards.raml
+  contentCardPost: !include resourceTypes/contentCardPost.raml
+  contentCardPut: !include resourceTypes/contentCardPut.raml
+/{id_organization}:
+  /content_cards:
+    get:
+      responses: 
+        200:
+          body: 
+            application/json:
+              type: contentCards[]
+              example: !include examples/json_files/contentCards.json
+    post:
+      body: 
+        application/json:
+          type: contentCardPost
+          example: !include examples/json_files/contentCardPost.json
+      responses: 
+        200:
+          body: 
+            application/json:
+              example: !include examples/json_files/responses/contentCardInserted.json
+    /{id_content_card}:
+      get:
+        responses: 
+          200:
+            body: 
+              application/json:
+                type: contentCardPut
+                example: !include examples/json_files/contentCardPut.json      
+      put:
+        body: 
+          application/json:
+            type: contentCardPut
+            example: !include examples/json_files/contentCardPut.json
+        responses: 
+          200:
+            body: 
+              application/json:
+                example: !include examples/json_files/responses/contenCardUpdated.json            
