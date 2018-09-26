@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="json_to_sql" format="json">
+      <types:example format="json" location="api/examples/json_files/contentCardPost.json"/>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#d7e470a0-ce71-454e-9153-99e992f2f2a1">
+    <types:processor-declaration/>
+  </types:enrichment>
+  <types:enrichment select="#22826f2f-4786-4e7a-9d4d-9b3e2e03ff69">
+    <types:processor-declaration/>
+  </types:enrichment>
+</types:mule>
