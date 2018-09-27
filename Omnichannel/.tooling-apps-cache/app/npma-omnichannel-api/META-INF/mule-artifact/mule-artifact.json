@@ -1,5 +1,6 @@
 {
   "configs": [
+    "places-channel.xml",
     "beacons-channel.xml",
     "omnichannel_api.xml",
     "global-configuration.xml"
@@ -8,7 +9,7 @@
   "redeploymentEnabled": true,
   "name": "com.mycompany:npma-omnichannel-api:1.0.0-SNAPSHOT",
   "minMuleVersion": "4.1.2",
-  "requiredProduct": "MULE",
+  "requiredProduct": "MULE_EE",
   "classLoaderModelLoaderDescriptor": {
     "id": "mule",
     "attributes": {

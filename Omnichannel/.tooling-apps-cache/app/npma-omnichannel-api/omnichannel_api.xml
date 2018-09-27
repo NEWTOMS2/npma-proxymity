@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd ">
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
     <apikit:config name="omnichannel_api-config" raml="omnichannel_api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
 	<flow name="omnichannel_api-main">
         <http:listener path="/api/*" config-ref="Omnichannel_HTTP_Listener_config">
@@ -117,119 +118,16 @@ output application/json
         </error-handler>
     </flow>
     <flow name="put:\beacons\(id_organization)\hierarchy\(id_beacon_hierarchy):application\json:omnichannel_api-config">
-        <logger level="INFO" doc:name="Logger" doc:id="71811a42-53f1-4aba-a69a-74e09251f7db" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]"/>
-		<http:request method="PUT" doc:name="beacons-api: PUT: /beacons/{id_organization}/hierarchy/{id_beacon_hierarchy}" doc:id="797a61bc-bab3-4247-a036-68efbbed4b95" config-ref="Beacons_HTTP_Request_configuration1" path="/beacons/{id_organization}/hierarchy/{id_beacon_hierarchy}">
-			<http:uri-params><![CDATA[#[output application/java
----
-{
-	"id_organization" : attributes.uriParams.id_organization,
-	"id_beacon_hierarchy" : attributes.uriParams.id_beacon_hierarchy
-}]]]></http:uri-params>
-		</http:request>
-		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" doc:id="3c6674a5-77a5-4062-afae-c134d1a38d88">
-            <ee:variables>
-                <ee:set-variable variableName="id_organization"><![CDATA[attributes.uriParams.id_organization]]></ee:set-variable>
-                <ee:set-variable variableName="id_beacon_hierarchy"><![CDATA[attributes.uriParams.id_beacon_hierarchy]]></ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  status: true,
-  message: "beacon hierarchy updated"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
-		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="7cc95532-099b-4e2d-b8cc-7d13a9a749b2" />
+		<flow-ref doc:name="update-beacon-hierarchy-flow" doc:id="fb2d789e-ad8a-4957-8603-3ffb093b00e9" name="update-beacon-hierarchy-flow" />
     </flow>
     <flow name="put:\beacons\(id_organization)\place_hierarchy\(id_beacon_place_hierarchy):application\xml:omnichannel_api-config">
-        <logger level="INFO" doc:name="Logger" doc:id="5fb9988c-0cc5-4098-b002-2a1188b0e947" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]" />
-		<http:request method="PUT" doc:name="beacons-api: PUT: /beacons/{id_organization}/place_hierarchy" doc:id="d715402c-b940-4b29-8285-bbf5674567c3" config-ref="Beacons_HTTP_Request_configuration1" path="/beacons/{id_organization}/place_hierarchy/{id_beacon_place-hierarchy}">
-			<http:uri-params><![CDATA[#[output application/java
----
-{
-	"id_organization" : attributes.uriParams.id_organization,
-	"id_beacon_place_hierarchy" : attributes.uriParams.id_beacon_place_hierarchy
-}]]]></http:uri-params>
-		</http:request>
-		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" doc:id="2701157a-47a0-42d7-a506-da05781e94ef">
-            <ee:variables>
-                <ee:set-variable variableName="id_organization"><![CDATA[attributes.uriParams.id_organization]]></ee:set-variable>
-                <ee:set-variable variableName="id_beacon_place_hierarchy"><![CDATA[attributes.uriParams.id_beacon_place_hierarchy]]></ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  status: true,
-  message: "beacon place hierarchy updated"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="update-place-hierarchy-flow" doc:id="099c7f84-77e6-42d5-b39c-245871cf2c2f" name="update-place-hierarchy-flow" />
     </flow>
     <flow name="put:\beacons\(id_organization)\type\(id_beacon_type):application\json:omnichannel_api-config">
-        <logger level="INFO" doc:name="Logger" doc:id="df6f96af-fde0-4e3a-9f48-f16d09b4fe49" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]"/>
-		<http:request method="PUT" doc:name="beacons-api: PUT: /beacons/{id_organization}/type" doc:id="fb8bce33-7da5-4c03-98b0-da04d34a027c" config-ref="Beacons_HTTP_Request_configuration1" path="/beacons/{id_organization}/type/{id_beacon_type}">
-			<http:uri-params><![CDATA[#[output application/java
----
-{
-	"id_organization" : attributes.uriParams.id_organization,
-	"id_beacon_type" : attributes.uriParams.id_beacon_type
-}]]]></http:uri-params>
-		</http:request>
-		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" doc:id="459019a2-5bde-442f-bcf3-4680701b6994">
-            <ee:variables>
-                <ee:set-variable variableName="id_organization"><![CDATA[attributes.uriParams.id_organization]]></ee:set-variable>
-                <ee:set-variable variableName="id_beacon_type"><![CDATA[attributes.uriParams.id_beacon_type]]></ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  status: true,
-  message: "beacon type updated"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
-		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="69ff6486-048c-422e-8de8-65cf26970c3f" />
+		<flow-ref doc:name="update-beacon-type-flow" doc:id="185f97da-25c3-447c-93a7-7242b59265b0" name="update-beacon-type-flow" />
     </flow>
     <flow name="put:\beacons\(id_organization)\(id_beacon):application\json:omnichannel_api-config">
-        <logger level="INFO" doc:name="Logger" doc:id="bd9cec2d-805a-47f3-8375-4805c772a9cc" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]"/>
-		<http:request method="PUT" doc:name="beacons-api PUT: /beacons/{id_organization}/{id_beacon}" doc:id="5d66eb65-9a84-4906-8e52-cd12d0729af4" config-ref="Beacons_HTTP_Request_configuration1" path="/beacons/{id_organization}/{id_beacon}">
-			<http:uri-params><![CDATA[#[output application/java
----
-{
-	"id_organization" : attributes.uriParams.id_organization,
-	"id_beacon" : attributes.uriParams.id_beacon
-}]]]></http:uri-params>
-		</http:request>
-		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" doc:id="8e819572-85ac-43c7-9c55-d601f332848d">
-            <ee:variables>
-                <ee:set-variable variableName="id_organization"><![CDATA[attributes.uriParams.id_organization]]></ee:set-variable>
-                <ee:set-variable variableName="id_beacon"><![CDATA[attributes.uriParams.id_beacon]]></ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="287555e2-3143-432f-b0f1-8d673ad39ac9">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  status: true,
-  message: "beacon updated"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
-		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="ad9091f1-c487-4a93-9e63-c0f8a19d47a8" />
+		<flow-ref doc:name="update-beacon-flow" doc:id="564cf4a2-a274-4cfd-9b22-6814ad6b5277" name="update-beacon-flow" />
     </flow>
     <flow name="put:\(id_organization)\content_cards\(id_content_card):application\json:omnichannel_api-config">
         <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
@@ -324,38 +222,7 @@ output application/json
         </ee:transform>
     </flow>
     <flow name="get:\beacons:omnichannel_api-config">
-		<logger level="INFO" doc:name="Logger" doc:id="af4da992-650f-44cc-9b2b-65eca43bda35" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]"/>
-		<http:request method="GET" doc:name="beacons-api: GET: /beacons" doc:id="fe4246a6-9a47-4fcb-8680-c18733a74d50" path="/beacons" config-ref="Beacons_HTTP_Request_configuration1"/>
-		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="a3d2739a-ad2c-4a83-af11-ad5b8674cab6">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-[
-  {
-    beacon_type: "Advertisement Pusher",
-    id_beacon_type: 1,
-    beacon_hierarchy: "Front Store",
-    name: "Blue-Bird",
-    id_beacon_hierarchy: 1,
-    broadcast_url: "www.url.com",
-    id_organization: "93AB2E19-1057-4EF3-9856-5089FB5E6628",
-    id: 1
-  }, 
-  {
-    beacon_type: "Point Catcher",
-    id_beacon_type: 2,
-    beacon_hierarchy: "Rack 1",
-    name: "Jade",
-    id_beacon_hierarchy: 2,
-    broadcast_url: "www.url.com",
-    id_organization: "93AB2E19-1057-4EF3-9856-5089FB5E6628",
-    id: 2
-  }
-]]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
-		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="3edac5e1-f636-44d0-a6f4-523ed0be4ea9" />
+		<flow-ref doc:name="get-beacons-flow" doc:id="fc60e4cc-85b5-4b4f-9a20-9e7d85b92179" name="get-beacons-flow" />
     </flow>
     <flow name="get:\(id_organization)\content_cards:omnichannel_api-config">
         <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
@@ -382,44 +249,7 @@ output application/json
         </ee:transform>
     </flow>
     <flow name="get:\beacons\(id_organization)\hierarchy:omnichannel_api-config">
-        <logger level="INFO" doc:name="Logger" doc:id="97141f9e-c57c-43e9-840d-0bde24241d2e" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]"/>
-		<http:request method="GET" doc:name="beacons-api: GET: /beacons/{id_organization}/hierarchy" doc:id="bf5ff74a-940b-477e-bb51-5df91625dff0" config-ref="Beacons_HTTP_Request_configuration1" path="/beacons/{id_organization}/hierarchy">
-			<http:uri-params><![CDATA[#[output application/java
----
-{
-	"id_organization" : attributes.uriParams.id_organization
-}]]]></http:uri-params>
-		</http:request>
-		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" doc:id="90759366-398c-457c-9704-c18dff4b2aee">
-            <ee:variables>
-                <ee:set-variable variableName="id_organization"><![CDATA[attributes.uriParams.id_organization]]></ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-[
-  {
-    id: 1,
-    id_organization: "ECB11EDB-3860-4733-9096-DC67FEDAD127",
-    name: "Front Store"
-  }, 
-  {
-    id: 2,
-    id_organization: "ECB11EDB-3860-4733-9096-DC67FEDAD127",
-    name: "Rack 1"
-  }, 
-  {
-    id: 3,
-    id_organization: "ECB11EDB-3860-4733-9096-DC67FEDAD127",
-    name: "Section 5"
-  }
-]]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
-		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="2957e967-6f73-472f-a8ef-e55587d57b6a" />
+		<flow-ref doc:name="get-beacons-hierarchy-flow" doc:id="7377bcfa-0192-4962-8ad0-279073eb3348" name="get-beacons-hierarchy-flow" />
     </flow>
     <flow name="get:\organizations:omnichannel_api-config">
         <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
@@ -445,141 +275,7 @@ output application/json
         </ee:transform>
     </flow>
     <flow name="get:\beacons\(id_organization)\place_hierarchy:omnichannel_api-config">
-        <logger level="INFO" doc:name="Logger" doc:id="25462087-9761-4798-8dbc-c52caaa6070a" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]"/>
-		<http:request method="GET" doc:name="beacons-api: GET: /beacons/{id_organization}/place_hierarchy" doc:id="b7dc2086-37c9-4119-81d7-3de3d369b269" config-ref="Beacons_HTTP_Request_configuration1" path="/beacons/{id_organization}/place_hierarchy">
-			<http:uri-params><![CDATA[#[output application/java
----
-{
-	"id_organization" : attributes.uriParams.id_organization
-}]]]></http:uri-params>
-		</http:request>
-		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" doc:id="d7c54c42-175e-49da-84b4-a7937874d06b">
-            <ee:variables>
-                <ee:set-variable variableName="id_organization"><![CDATA[attributes.uriParams.id_organization]]></ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  places: [
-    {
-      id: 1,
-      name: "Front Store",
-      hierarchy: [
-        {
-          id: 1,
-          name: "Left Corner",
-          beacons: [
-            {
-              id: 56,
-              name: "Yellow-Bird",
-              "type": "Advertisement Pusher",
-              radius: "12m"
-            }, 
-            {
-              id: 77,
-              name: "Mole-Vendor",
-              "type": "Move Behavior",
-              radius: "2m"
-            }
-          ]
-        }, 
-        {
-          id: 2,
-          name: "Right Corner",
-          beacons: [
-            {
-              id: 23,
-              name: "Data-Rock",
-              "type": "Point Catcher",
-              radius: "45m"
-            }, 
-            {
-              id: 14,
-              name: "Mule-Road",
-              "type": "Solo Wacther",
-              radius: "100m"
-            }
-          ]
-        }
-      ]
-    }, 
-    {
-      id: 2,
-      name: "Electronics",
-      hierarchy: [
-        {
-          id: 1,
-          name: "Left Corner",
-          beacons: [
-            {
-              id: 52,
-              name: "Yellow-Bird-II",
-              "type": "Advertisement Pusher",
-              radius: "12m"
-            }, 
-            {
-              id: 77,
-              name: "Mole-Vendor-A",
-              "type": "Move Behavior",
-              radius: "2m"
-            }
-          ]
-        }, 
-        {
-          id: 2,
-          name: "Right Corner",
-          beacons: [
-            {
-              id: 23,
-              name: "Data-Rock-Ruby",
-              "type": "Point Catcher",
-              radius: "22m"
-            }, 
-            {
-              id: 14,
-              name: "Mule-Road",
-              "type": "Solo Wacther",
-              radius: "100m"
-            }
-          ]
-        }
-      ]
-    }
-  ],
-  unassigned_beacons: [
-    {
-      id: 45,
-      name: "Blue-Bird",
-      "type": "Advertisement Pusher",
-      radius: "45m"
-    }, 
-    {
-      id: 12,
-      name: "Jade",
-      "type": "Advertisement Pusher",
-      radius: "45m"
-    }, 
-    {
-      id: 54,
-      name: "Invisible-Gentelmen",
-      "type": "Advertisement Pusher",
-      radius: "45m"
-    }, 
-    {
-      id: 34,
-      name: "White-Peakcok",
-      "type": "Advertisement Pusher",
-      radius: "45m"
-    }
-  ]
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
-		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="e53664aa-9afb-4f3c-a166-680e8b0ab84b" />
+		<flow-ref doc:name="get-place-hierarchy-flow" doc:id="01f3e2be-60a0-4a2a-aee2-bb5893f2b493" name="get-place-hierarchy-flow" />
     </flow>
     <flow name="get:\(id_organization)\places:omnichannel_api-config">
         <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
@@ -632,44 +328,7 @@ output application/json
         </ee:transform>
     </flow>
     <flow name="get:\beacons\(id_organization)\type:omnichannel_api-config">
-        <logger level="INFO" doc:name="Logger" doc:id="b2df2226-4a4d-4c1f-89ea-9f37c0787c4e" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]"/>
-		<http:request method="GET" doc:name="beacons-api: GET: /beacons/{id_organization}/type" doc:id="78381e54-8991-4971-b5bc-8fbd499fc2c3" config-ref="Beacons_HTTP_Request_configuration1" path="/beacons/{id_organization}/type" >
-			<http:uri-params ><![CDATA[#[output application/java
----
-{
-	"id_organization" : attributes.uriParams.id_organization
-}]]]></http:uri-params>
-		</http:request>
-		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" doc:id="15c77a2d-bd31-4309-b083-e4fe4b146608">
-            <ee:variables>
-                <ee:set-variable variableName="id_organization"><![CDATA[attributes.uriParams.id_organization]]></ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-[
-  {
-    id: 1,
-    id_organization: "ECB11EDB-3860-4733-9096-DC67FEDAD127",
-    name: "Advertisement Pusher"
-  }, 
-  {
-    id: 2,
-    id_organization: "ECB11EDB-3860-4733-9096-DC67FEDAD127",
-    name: "Point Catcher"
-  }, 
-  {
-    id: 3,
-    id_organization: "ECB11EDB-3860-4733-9096-DC67FEDAD127",
-    name: "Move Behavior"
-  }
-]]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
-		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="48b93bf5-3ece-49c7-8747-2b6c4c44ebda" />
+		<flow-ref doc:name="get-type-flow" doc:id="29dbfe8b-3e7b-45a7-88a2-195721cd0dfa" name="get-type-flow" />
     </flow>
     <flow name="get:\users:omnichannel_api-config">
         <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
@@ -701,99 +360,13 @@ output application/json
         </ee:transform>
     </flow>
     <flow name="get:\beacons\(id_organization)\hierarchy\(id_beacon_hierarchy):omnichannel_api-config">
-        <logger level="INFO" doc:name="Logger" doc:id="2d286a3a-67b7-4643-8f8a-b51c86b67f6f" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]"/>
-		<http:request method="GET" doc:name="beacons-api: GET: /beacons/{id_organization}/hierarchy/{id_beacon_hierarchy}" doc:id="b238ee98-bd2f-4067-9f16-0190492d336f" config-ref="Beacons_HTTP_Request_configuration1" path="/beacons/{id_organization}/hierarchy/{id_beacon_hierarchy}">
-			<http:uri-params><![CDATA[#[output application/java
----
-{
-	"id_organization" : attributes.uriParams.id_organization,
-	"id_beacon_hierarchy" : attributes.uriParams.id_beacon_hierarchy
-}]]]></http:uri-params>
-		</http:request>
-		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" doc:id="4e6b543b-620a-4230-a112-d991ca8af0cf">
-            <ee:variables>
-                <ee:set-variable variableName="id_organization"><![CDATA[attributes.uriParams.id_organization]]></ee:set-variable>
-                <ee:set-variable variableName="id_beacon_hierarchy"><![CDATA[attributes.uriParams.id_beacon_hierarchy]]></ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  id: 1,
-  id_organization: "ECB11EDB-3860-4733-9096-DC67FEDAD127",
-  name: "Front Store"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
-		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="b3406cec-c65e-4d76-a1e4-ba55fca0d578" />
+		<flow-ref doc:name="get-beacon-hierarchy-flow" doc:id="a365dc84-d278-4213-b57e-b24a0a3b9133" name="get-beacon-hierarchy-flow" />
     </flow>
     <flow name="get:\beacons\(id_organization)\type\(id_beacon_type):omnichannel_api-config">
-        <logger level="INFO" doc:name="Logger" doc:id="e7d296d7-de8f-4588-ac35-a2acaec8f74b" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]"/>
-		<http:request method="GET" doc:name="beacons-api: GET: /beacons/{id_organization}/type" doc:id="24c9acb8-515d-4be6-b38c-46168b0ecc77" config-ref="Beacons_HTTP_Request_configuration1" path="/beacons/{id_organization}/type/{id_beacon_type}">
-			<http:uri-params><![CDATA[#[output application/java
----
-{
-	"id_organization" : attributes.uriParams.id_organization,
-	"id_beacon_type" : attributes.uriParams.id_beacon_type
-}]]]></http:uri-params>
-		</http:request>
-		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
-            <ee:variables>
-                <ee:set-variable variableName="id_organization">attributes.uriParams.id_organization</ee:set-variable>
-                <ee:set-variable variableName="id_beacon_type">attributes.uriParams.id_beacon_type</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  id: 1,
-  id_organization: "ECB11EDB-3860-4733-9096-DC67FEDAD127",
-  name: "Advertisement Pusher"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
-		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="1f8c13e0-bd96-40d1-b0cc-1f98e9edc582" />
+		<flow-ref doc:name="get-beacon-type-flow" doc:id="453a9e20-35cd-44a9-83f3-a3e3d57614a5" name="get-beacon-type-flow" />
     </flow>
     <flow name="get:\beacons\(id_organization)\(id_beacon):omnichannel_api-config">
-        <logger level="INFO" doc:name="Logger" doc:id="73fc6f56-d8ac-4901-8f0a-5d009f58ea76" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]"/>
-		<http:request method="GET" doc:name="beacons-api GET: /beacons/{id_organization}/{id_beacon}" doc:id="d9b8c4b4-4cc6-4272-9b11-494011d0dea0" path="/beacons/{id_organization}/{id_beacon}" config-ref="Beacons_HTTP_Request_configuration1">
-			<http:uri-params ><![CDATA[#[output application/java
----
-{
-	"id_organization" : attributes.uriParams.id_organization,
-	"id_beacon" : attributes.uriParams.id_beacon
-}]]]></http:uri-params>
-		</http:request>
-		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" doc:id="a5325e97-8f59-4284-9147-04cf6b5fbbef">
-            <ee:variables>
-                <ee:set-variable variableName="id_organization"><![CDATA[attributes.uriParams.id_organization]]></ee:set-variable>
-                <ee:set-variable variableName="id_beacon"><![CDATA[attributes.uriParams.id_beacon]]></ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  beacon_type: "Advertisement Pusher",
-  id_beacon_type: 1,
-  beacon_hierarchy: "Rack 1",
-  name: "Blue-Bird",
-  id_beacon_hierarchy: 1,
-  broadcast_url: "www.url.com",
-  id_organization: "93AB2E19-1057-4EF3-9856-5089FB5E6628",
-  id: 1
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
-		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="6742a89c-315c-4584-bdce-707673fad1a4" />
+		<flow-ref doc:name="Flow Reference" doc:id="980a89d7-afdb-47e5-86ce-3741ab300dc7" name="get-beacon-flow" />
     </flow>
     <flow name="get:\(id_organization)\content_cards\(id_content_card):omnichannel_api-config">
         <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
@@ -802,7 +375,7 @@ output application/json
                 <ee:set-variable variableName="id_content_card">attributes.uriParams.id_content_card</ee:set-variable>
             </ee:variables>
         </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="04687c62-c27f-47f3-b167-f036926884be">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -851,49 +424,7 @@ output application/json
         </ee:transform>
     </flow>
     <flow name="get:\beacons\(id_organization):omnichannel_api-config">
-        <logger level="INFO" doc:name="Logger" doc:id="9917ab93-95b3-4958-adf0-1a83191e2a65" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]" />
-		<http:request method="GET" doc:name="beacons-api: GET: /beacons/{id_organization}" doc:id="705d7892-dcd7-49c2-9d45-2112571a5554" path="/beacons/{id_organization}" config-ref="Beacons_HTTP_Request_configuration1">
-			<http:uri-params ><![CDATA[#[output application/java
----
-{
-	"id_organization" : attributes.uriParams.id_organization
-}]]]></http:uri-params>
-		</http:request>
-		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" doc:id="e27c4db6-26b6-4ab4-88fa-2c783abfaed4">
-            <ee:variables>
-                <ee:set-variable variableName="id_organization"><![CDATA[attributes.uriParams.id_organization]]></ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-[
-  {
-    beacon_type: "Advertisement Pusher",
-    id_beacon_type: 1,
-    beacon_hierarchy: "Front Store",
-    name: "Blue-Bird",
-    id_beacon_hierarchy: 1,
-    broadcast_url: "www.url.com",
-    id_organization: "93AB2E19-1057-4EF3-9856-5089FB5E6628",
-    id: 1
-  }, 
-  {
-    beacon_type: "Point Catcher",
-    id_beacon_type: 2,
-    beacon_hierarchy: "Rack 1",
-    name: "Jade",
-    id_beacon_hierarchy: 2,
-    broadcast_url: "www.url.com",
-    id_organization: "93AB2E19-1057-4EF3-9856-5089FB5E6628",
-    id: 2
-  }
-]]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
-		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="2b83f6d6-0a9b-4a42-ad93-7fe2b80ff2a0" />
+		<flow-ref doc:name="get-beacons-by-organization-flow" doc:id="46de14d9-48c3-4308-8545-7862d78b2e92" name="get-beacons-by-organization-flow" />
     </flow>
     <flow name="get:\(id_organization)\places\(id_place):omnichannel_api-config">
         <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
@@ -995,31 +526,7 @@ output application/json
         </ee:transform>
     </flow>
     <flow name="post:\beacons\(id_organization)\hierarchy:application\json:omnichannel_api-config">
-        <logger level="INFO" doc:name="Logger" doc:id="499a78b2-fa3e-41ef-90f5-40f6c72209d2" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]"/>
-		<http:request method="POST" doc:name="beacons-api: POST: /beacons/{id_organization}/hierarchy" doc:id="b9d96021-4e5b-4671-90cf-5962fc295d7e" config-ref="Beacons_HTTP_Request_configuration1" path="/beacons/{id_organization}/hierarchy">
-			<http:uri-params><![CDATA[#[output application/java
----
-{
-	"id_organization" : attributes.uriParams.id_organization
-}]]]></http:uri-params>
-		</http:request>
-		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" doc:id="09a1fe19-43a8-4a29-9ca8-307c954f3e1a">
-            <ee:variables>
-                <ee:set-variable variableName="id_organization"><![CDATA[attributes.uriParams.id_organization]]></ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  status: true,
-  message: "registered beacon hierarchy"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
-		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="ad167839-5a95-4133-a366-8cf58c22d4a3" />
+		<flow-ref doc:name="create-hierarchy-flow" doc:id="374d480d-ec1a-4f12-a87a-5b1915ddb6de" name="create-hierarchy-flow" />
     </flow>
     <flow name="post:\organizations:application\json:omnichannel_api-config">
         <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
@@ -1066,31 +573,7 @@ output application/json
         </ee:transform>
     </flow>
     <flow name="post:\beacons\(id_organization)\type:application\json:omnichannel_api-config">
-        <logger level="INFO" doc:name="Logger" doc:id="7e627321-4626-4f57-a0b0-96728bcd2ecb" />
-		<http:request method="POST" doc:name="beacons-api: POST: /beacons/{id_organization}/type" doc:id="55eec136-e44f-4e02-becf-af7dd0afe95f" config-ref="Beacons_HTTP_Request_configuration1" path="/beacons/{id_organization}/type">
-			<http:uri-params ><![CDATA[#[output application/java
----
-{
-	"id_organization" : attributes.uriParams.id_organization
-}]]]></http:uri-params>
-		</http:request>
-		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" doc:id="62d07ac6-d4b2-4350-b1e6-2ff8d41ec765">
-            <ee:variables>
-                <ee:set-variable variableName="id_organization"><![CDATA[attributes.uriParams.id_organization]]></ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  status: true,
-  message: "registered beacon type"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
-		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="7c3a138f-d044-46b2-a1bc-fb0ddf14f63c" />
+		<flow-ref doc:name="create-type-flow" doc:id="20cc17d3-14d8-4514-8899-307335ee2725" name="create-type-flow" />
     </flow>
     <flow name="post:\users:application\json:omnichannel_api-config">
         <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
