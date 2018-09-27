@@ -167,23 +167,7 @@ output application/json
         </ee:transform>
     </flow>
     <flow name="put:\(id_organization)\places\(id_place):application\json:omnichannel_api-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
-            <ee:variables>
-                <ee:set-variable variableName="id_organization">attributes.uriParams.id_organization</ee:set-variable>
-                <ee:set-variable variableName="id_place">attributes.uriParams.id_place</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  status: true,
-  message: "a place has been updated"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="update-place-flow" doc:id="bbb53cab-3883-4978-854b-dc2fdcbc6572" name="update-place-flow" />
     </flow>
     <flow name="put:\users\roles\(id_user_role):application\json:omnichannel_api-config">
         <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
@@ -278,35 +262,7 @@ output application/json
 		<flow-ref doc:name="get-place-hierarchy-flow" doc:id="01f3e2be-60a0-4a2a-aee2-bb5893f2b493" name="get-place-hierarchy-flow" />
     </flow>
     <flow name="get:\(id_organization)\places:omnichannel_api-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
-            <ee:variables>
-                <ee:set-variable variableName="id_organization">attributes.uriParams.id_organization</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-[
-  {
-    id: 1,
-    id_organization: "ECB11EDB-3860-4733-9096-DC67FEDAD127",
-    name: "Front Store"
-  }, 
-  {
-    id: 1,
-    id_organization: "ECB11EDB-3860-4733-9096-DC67FEDAD127",
-    name: "Outside"
-  }, 
-  {
-    id: 1,
-    id_organization: "ECB11EDB-3860-4733-9096-DC67FEDAD127",
-    name: "Electronics"
-  }
-]]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="get-places-flow" doc:id="c9581113-5180-4529-953d-d83c0893ab9c" name="get-places-flow" />
     </flow>
     <flow name="get:\users\roles:omnichannel_api-config">
         <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
@@ -366,7 +322,7 @@ output application/json
 		<flow-ref doc:name="get-beacon-type-flow" doc:id="453a9e20-35cd-44a9-83f3-a3e3d57614a5" name="get-beacon-type-flow" />
     </flow>
     <flow name="get:\beacons\(id_organization)\(id_beacon):omnichannel_api-config">
-		<flow-ref doc:name="Flow Reference" doc:id="980a89d7-afdb-47e5-86ce-3741ab300dc7" name="get-beacon-flow" />
+		<flow-ref doc:name="get-beacon-flow" doc:id="980a89d7-afdb-47e5-86ce-3741ab300dc7" name="get-beacon-flow" />
     </flow>
     <flow name="get:\(id_organization)\content_cards\(id_content_card):omnichannel_api-config">
         <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
@@ -427,24 +383,7 @@ output application/json
 		<flow-ref doc:name="get-beacons-by-organization-flow" doc:id="46de14d9-48c3-4308-8545-7862d78b2e92" name="get-beacons-by-organization-flow" />
     </flow>
     <flow name="get:\(id_organization)\places\(id_place):omnichannel_api-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
-            <ee:variables>
-                <ee:set-variable variableName="id_organization">attributes.uriParams.id_organization</ee:set-variable>
-                <ee:set-variable variableName="id_place">attributes.uriParams.id_place</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  id: 1,
-  id_organization: "ECB11EDB-3860-4733-9096-DC67FEDAD127",
-  name: "Front Store"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="get-place-flow" doc:id="7900025b-c24d-410c-b266-843d55685228" name="get-place-flow" />
     </flow>
     <flow name="get:\users\roles\(id_user_role):omnichannel_api-config">
         <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
@@ -542,22 +481,7 @@ output application/json
         </ee:transform>
     </flow>
     <flow name="post:\(id_organization)\places:application\json:omnichannel_api-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
-            <ee:variables>
-                <ee:set-variable variableName="id_organization">attributes.uriParams.id_organization</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  status: true,
-  message: "a new place has been created"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="create-place-flow" doc:id="58594301-eab7-4c21-aab9-297df3fc02bd" name="create-place-flow" />
     </flow>
     <flow name="post:\users\roles:application\json:omnichannel_api-config">
         <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
