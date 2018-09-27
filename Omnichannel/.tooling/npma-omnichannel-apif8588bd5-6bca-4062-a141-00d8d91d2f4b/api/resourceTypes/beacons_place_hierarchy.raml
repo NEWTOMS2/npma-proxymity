@@ -1,0 +1,35 @@
+#%RAML 1.0 DataType
+type: object
+properties: 
+  places:
+    type: array
+    items: 
+      type: object
+      properties:
+        id: integer
+        name: string
+        hierarchy:
+          type: array
+          items: 
+            type: object
+            properties:
+              id: integer
+              name: string
+              beacons:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id: integer
+                    name: string
+                    type: string
+                    radius: string
+  unassigned_beacons:
+    type: array
+    items: 
+      type: object
+      properties:
+        id: integer
+        name: string
+        type: string
+        radius: string                  
