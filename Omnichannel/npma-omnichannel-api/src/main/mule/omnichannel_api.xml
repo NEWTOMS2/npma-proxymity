@@ -151,13 +151,14 @@ output application/json
 			<http:uri-params><![CDATA[#[output application/java
 ---
 {
-	"id_organization" : attributes.uriParams.id_organization
+	"id_organization" : attributes.uriParams.id_organization,
+	"id_beacon_place_hierarchy" : attributes.uriParams.id_beacon_place_hierarchy
 }]]]></http:uri-params>
 		</http:request>
-		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
+		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" doc:id="2701157a-47a0-42d7-a506-da05781e94ef">
             <ee:variables>
-                <ee:set-variable variableName="id_organization">attributes.uriParams.id_organization</ee:set-variable>
-                <ee:set-variable variableName="id_beacon_place_hierarchy">attributes.uriParams.id_beacon_place_hierarchy</ee:set-variable>
+                <ee:set-variable variableName="id_organization"><![CDATA[attributes.uriParams.id_organization]]></ee:set-variable>
+                <ee:set-variable variableName="id_beacon_place_hierarchy"><![CDATA[attributes.uriParams.id_beacon_place_hierarchy]]></ee:set-variable>
             </ee:variables>
         </ee:transform>
         <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">

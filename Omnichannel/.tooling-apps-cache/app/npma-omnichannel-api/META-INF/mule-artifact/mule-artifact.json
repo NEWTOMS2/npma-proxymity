@@ -1,7 +1,7 @@
 {
   "configs": [
+    "beacons-channel.xml",
     "omnichannel_api.xml",
-    "channel-manager.xml",
     "global-configuration.xml"
   ],
   "secureProperties": [],
