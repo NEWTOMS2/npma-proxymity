@@ -1,9 +1,11 @@
 {
   "configs": [
+    "organizations-channel.xml",
     "places-channel.xml",
     "beacons-channel.xml",
     "content-cards-channel.xml",
     "omnichannel_api.xml",
+    "users-channel.xml",
     "global-configuration.xml"
   ],
   "secureProperties": [],

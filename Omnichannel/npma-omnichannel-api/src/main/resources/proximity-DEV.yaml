@@ -8,7 +8,7 @@ http:
   places:
     host: "npma-places-experience-api.us-e1.cloudhub.io"
     port: "443"
-  content-cards:
+  contentcards:
     host: "npma-content-cards-experience-api.us-e1.cloudhub.io"
     port: "443"
   users:

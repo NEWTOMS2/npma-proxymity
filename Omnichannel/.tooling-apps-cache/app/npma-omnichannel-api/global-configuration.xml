@@ -13,9 +13,15 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		<http:request-connection protocol="HTTPS" host="${http.beacons.host}" port="${http.beacons.port}" />
 	</http:request-config>
 	<http:request-config name="Places_HTTPS_Request_configuration" doc:name="HTTP Request configuration" doc:id="359602e5-ab7e-4692-a6b7-d73a919358bb" basePath="/api">
-		<http:request-connection host="${http.places.host}" port="${http.places.port}" />
+		<http:request-connection host="${http.places.host}" port="${http.places.port}" protocol="HTTPS"/>
 	</http:request-config>
 	<http:request-config name="Content_cards_HTTPS_Request_configuration" doc:name="HTTP Request configuration" doc:id="9867e7ad-271a-4693-9b97-9ec2b98bf57e" basePath="/api" >
-		<http:request-connection host="${http.content-cards.hos}" port="${http.content-cards.port}" />
+		<http:request-connection host="${http.contentcards.host}" port="${http.contentcards.port}" protocol="HTTPS"/>
+	</http:request-config>
+	<http:request-config name="Users_HTTPS_Request_configuration" doc:name="HTTP Request configuration" doc:id="9322a196-a2e3-41c1-807b-e093cfafa952" basePath="/api" >
+		<http:request-connection host="${http.users.host}" port="${http.users.port}" protocol="HTTPS"/>
+	</http:request-config>
+	<http:request-config name="Organizations_HTTPS_Request_configuration" doc:name="HTTP Request configuration" doc:id="53e4a7cb-8875-41a3-bd41-6c18ba3a6a97" basePath="/api" >
+		<http:request-connection host="${http.organizations.host}" port="${http.organizations.port}" protocol="HTTPS"/>
 	</http:request-config>
 </mule>
