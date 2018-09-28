@@ -1,0 +1,110 @@
+[
+	{
+		"id": 1,
+		"place_name": "Front Store",
+		"place_hierarchies": [
+			{
+				"id": 1,
+				"hierarchy_name": "Front Store",
+				"beacons": [
+					{
+						"id": 1,
+						"beacon_name": "Blue-Bird",
+						"beacon_type": "Advertisement Pusher",
+						"beacon_radius": "45m"
+					},
+					{
+						"id": 2,
+						"beacon_name": "Jade",
+						"beacon_type": "Advertisement Pusher",
+						"beacon_radius": "45m"
+					}
+				]
+			},
+			{
+				"id": 2,
+				"hierarchy_name": "string",
+				"beacons": [
+					{
+						"id": 3,
+						"beacon_name": "Blue-Bird",
+						"beacon_type": "Advertisement Pusher",
+						"beacon_radius": "45m"
+					},
+					{
+						"id": 4,
+						"beacon_name": "Jade",
+						"beacon_type": "Advertisement Pusher",
+						"beacon_radius": "45m"
+					}
+				]
+			}
+		]
+	},
+	{
+		"id": 2,
+		"place_name": "Outside",
+		"place_hierarchies": [
+			{
+				"id": 3,
+				"hierarchy_name": "Rack 1",
+				"beacons": [
+					{
+						"id": 5,
+						"beacon_name": "Blue-Bird",
+						"beacon_type": "Advertisement Pusher",
+						"beacon_radius": "45m"
+					},
+					{
+						"id": 6,
+						"beacon_name": "Jade",
+						"beacon_type": "Advertisement Pusher",
+						"beacon_radius": "45m"
+					}
+				]
+			}
+		]
+	},
+	{
+		"id": 3,
+		"place_name": "Front Store",
+		"place_hierarchies": [
+			{
+				"id": 4,
+				"hierarchy_name": "Left Corner",
+				"beacons": [
+					{
+						"id": 7,
+						"beacon_name": "Blue-Bird",
+						"beacon_type": "Advertisement Pusher",
+						"beacon_radius": "45m"
+					},
+					{
+						"id": 8,
+						"beacon_name": "Jade",
+						"beacon_type": "Advertisement Pusher",
+						"beacon_radius": "45m"
+					}
+				]
+			},
+			{
+				"id": 5,
+				"hierarchy_name": "Left Corner",
+				"beacons": [
+					{
+						"id": 9,
+						"beacon_name": "Blue-Bird",
+						"beacon_type": "Advertisement Pusher",
+						"beacon_radius": "45m"
+					},
+					{
+						"id": 10,
+						"beacon_name": "Jade",
+						"beacon_type": "Advertisement Pusher",
+						"beacon_radius": "45m"
+					}
+				]
+			}
+		]
+	}
+]

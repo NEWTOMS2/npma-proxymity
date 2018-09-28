@@ -1,0 +1,42 @@
+#%RAML 1.0 DataType
+type: object
+properties:
+  idCard:
+    type: string
+  title:
+    type: string
+  idOrganization:
+    type: string
+  idCardElements:
+    type: string
+  showCardImage:
+    type: boolean
+  imgUrl:
+    type: string
+  showCardContent:
+    type: boolean
+  htmlContent:
+    type: string
+  showCardActions:
+    type: boolean
+  IdCardActions:
+    type: string
+  actionButtons:
+    type: boolean
+  actions:
+    type: object
+    properties:
+      buttons:
+        type: array
+        items:
+          type: object
+          properties:
+            id?:
+              type: string
+            actionLabel:
+              type: string
+            actionType:
+              type: string
+
+
+

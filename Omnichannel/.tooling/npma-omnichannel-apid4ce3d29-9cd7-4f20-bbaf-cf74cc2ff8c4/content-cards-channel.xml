@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="create-content-card-flow" doc:id="87af1065-688b-43f9-802f-7074d1a841a8" >
+		<logger level="INFO" doc:name="Logger" doc:id="4491ddb6-bd12-44d1-b0ef-08e87bffb284" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]" />
+		<http:request method="POST" doc:name="content-cards-api: POST: /{id_organization}/content_cards" doc:id="32d13e06-08b4-411c-9910-1ad21edb4b57" config-ref="Content_cards_HTTPS_Request_configuration" path="content-cards-api: POST: /{id_organization}/content_cards">
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization
+}]]]></http:uri-params>
+		</http:request>
+	
+</flow>
+	<flow name="get-content-card-flow" doc:id="2f226df2-8e94-4726-a5d5-39a54194cd24" >
+		<logger level="INFO" doc:name="Logger" doc:id="cdf318a6-d757-48a3-9c89-4ad23ec52578" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]" />
+		<http:request method="GET" doc:name="content-cards-api: GET: /{id_organization}/content_cards/{id_content_card}" doc:id="eb61f482-9161-4f4f-9672-878e529cc3eb" config-ref="Content_cards_HTTPS_Request_configuration" path="/{id_organization}/content_cards/{id_content_card}">
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization,
+	"id_content_card" : attributes.uriParams.id_content_card
+}]]]></http:uri-params>
+		</http:request>
+	
+</flow>
+	<flow name="get-content-cards-flow" doc:id="40291b5f-48dd-41a6-b3ce-ea2fe0d12b41" >
+		<logger level="INFO" doc:name="Logger" doc:id="93c5edb1-e729-400a-a5a9-d14feac7c1a5" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]" />
+		<http:request method="GET" doc:name="content-cards-api: GET: /{id_organization}/content_cards" doc:id="709333a1-2e3e-47fb-9bd2-c1fc46f84fd2" config-ref="Content_cards_HTTPS_Request_configuration" path="/{id_organization}/content_cards">
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization
+}]]]></http:uri-params>
+		</http:request>
+	
+</flow>
+	<flow name="update-content-card-flow" doc:id="716d3957-bbe4-41ee-901e-5286dbc4d318" >
+		<logger level="INFO" doc:name="Logger" doc:id="8e82b67a-cb8b-4cfd-a3db-f207f67cbb2b" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]" />
+		<http:request method="PUT" doc:name="content-cards-api: PUT: /{id_organization}/content_cards/{id_content_card}" doc:id="2d98c37a-d1be-45d5-86c7-4749e1993153" config-ref="Content_cards_HTTPS_Request_configuration" path="/{id_organization}/content_cards/{id_content_card}">
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization,
+	"id_content_card" : attributes.uriParams.id_content_card
+}]]]></http:uri-params>
+		</http:request>
+	
+</flow>
+</mule>
