@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
 	<configuration-properties doc:name="Configuration properties" doc:id="90552d2a-ae08-4e32-9e03-a467ce68be58" file="proximity-${env}.yaml" />
 	<global-property doc:name="Global Property" doc:id="e60a0b1f-1b0a-4eb6-9edc-e7a1373619e1" doc:description="env = DEV" name="env" value="DEV" />
 	<http:listener-config name="Omnichannel_HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="cafbdda8-c2cb-456f-a9d0-e81f19fc0247" >
-		<http:listener-connection host="${http.omnichannel.host}" port="${http.omnichannel.port}" />
+		<http:listener-connection host="${http.omnichannel.host}" port="${http.omnichannel.port}" protocol="HTTPS">
+			<tls:context >
+				<tls:key-store type="jks" path="keystore.jks" keyPassword="password" password="password" />
+			</tls:context>
+		</http:listener-connection>
 	</http:listener-config>
 	<http:request-config name="Beacons_HTTPS_Request_configuration1" doc:name="HTTP Request configuration" doc:id="c9fd4a60-72cf-4a61-8733-5d6fc3254da6" basePath="/api" >
 		<http:request-connection protocol="HTTPS" host="${http.beacons.host}" port="${http.beacons.port}" />

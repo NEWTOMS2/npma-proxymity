@@ -145,18 +145,27 @@ types:
               application/json:
                 type: beaconsPlacesHierarchy
                 example: !include examples/json_files/beaconsPlaceHierarchy.json       
-      /{id_beacon_place_hierarchy}:
-        put:
-          description: Update a Beacon Place Hierarchy
-          body:
-            application/xml:
-              type: !include resourceTypes/beacon_place_hierarchy_put.raml
-              example: !include examples/json_files/beaconPlaceHierarchy.json
-          responses: 
-            200:
-              body: 
-                application/json:
-                  example: !include examples/response_files/beacon_place_hierarchy_updated.json
+      put:
+        description: Update a Beacon Place Hierarchy
+        queryParameters: 
+          operation:
+            type: string
+            description: Type operation to trigger stored procedure
+            enum: [update_place_hierarchy, update_beacon_hierarchy]
+            required: true
+          id:
+            type: integer
+            description: Id of the object to be updated
+            required: true 
+        body:
+          application/json:
+            type: !include resourceTypes/beacon_place_hierarchy_put.raml
+            example: !include examples/json_files/beaconPlaceHierarchy.json
+        responses: 
+          200:
+            body: 
+              application/json:
+                example: !include examples/response_files/beacon_place_hierarchy_updated.json
 /{id_organization}:
   /places:
     get:

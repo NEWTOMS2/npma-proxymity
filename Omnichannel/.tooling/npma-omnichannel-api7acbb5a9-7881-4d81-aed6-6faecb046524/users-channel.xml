@@ -33,7 +33,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		</http:request>
 	</flow>
 	<flow name="get-user-role-flow" doc:id="910d6446-42dc-4edf-991a-cc0fa4ab4592" >
-		<logger level="INFO" doc:name="Logger" doc:id="47747720-636d-4d2f-8104-d418111bbd1d" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]"/>
+		<logger level="INFO" doc:name="Logger" doc:id="47747720-636d-4d2f-8104-d418111bbd1d" message="#[{queryParams: attributes.queryParams, uriParams: attributes.uriParams}]"/>
 		<http:request method="GET" doc:name="users-api: GET: /users/roles/{id_user_role}" doc:id="004e3ac5-51f8-43f5-a73e-0252e0a78146" config-ref="Users_HTTPS_Request_configuration" path="/users/roles/{id_user_role}">
 			<http:uri-params><![CDATA[#[output application/java
 ---
@@ -43,9 +43,9 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		</http:request>
 	</flow>
 	<flow name="get-users-flow" doc:id="26132767-54e5-4fcc-9f17-fcc953c84c5c" >
-		<logger level="INFO" doc:name="Logger" doc:id="7917b5dd-128d-4a64-8480-f9eb82267a47" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]" />
+		<logger level="INFO" doc:name="Logger" doc:id="7917b5dd-128d-4a64-8480-f9eb82267a47" message='#[{queryParams: attributes.queryParams, uriParams: attributes.uriParams}]' />
 		<choice doc:name="Choice" doc:id="90d57b9e-e955-4952-812e-864e7ac0441b" >
-			<when expression="attributes.queryParams.id_organization != null">
+			<when expression="#[attributes.queryParams.id_organization != null]">
 				<http:request method="GET" doc:name="users-api: GET: /users?id_organization" doc:id="c5215c4c-6d1d-42e3-b039-6f982086a3ab" config-ref="Users_HTTPS_Request_configuration" path="/users" >
 					<http:query-params ><![CDATA[#[output application/java
 ---

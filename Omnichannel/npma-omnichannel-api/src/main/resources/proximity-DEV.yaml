@@ -13,7 +13,7 @@ http:
     port: "443"
   users:
     host: "npma-user-experience-api.us-e1.cloudhub.io"
-    port: "8082"
+    port: "443"
   organizations:
     host: "npma-orgaization-experience-api.us-e1.cloudhub.io"
     port: "443"      

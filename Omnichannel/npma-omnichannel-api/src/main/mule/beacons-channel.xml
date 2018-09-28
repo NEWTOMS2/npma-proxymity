@@ -121,6 +121,12 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	"id_organization" : attributes.uriParams.id_organization,
 	"id_beacon_place_hierarchy" : attributes.uriParams.id_beacon_place_hierarchy
 }]]]></http:uri-params>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"operation" : attributes.queryParams.operation,
+	"id" : attributes.queryParams.id
+}]]]></http:query-params>
 		</http:request>
 	</flow>
 	<flow name="update-beacon-type-flow" doc:id="e45b5c89-a7ea-49f6-86d4-e95aeaa17df6" >
