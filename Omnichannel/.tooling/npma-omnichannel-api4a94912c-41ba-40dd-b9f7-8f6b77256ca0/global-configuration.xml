@@ -28,4 +28,5 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 		<http:request-connection host="${http.organizations.host}" port="${http.organizations.port}" protocol="HTTPS"/>
 	</http:request-config>
 	<api-gateway:autodiscovery apiId="15539895" doc:name="API Autodiscovery" doc:id="c6ec6ec2-13ae-4206-b07b-5e4bf6749d29" flowRef="omnichannel_api-main" />
+	<http:listener-config name="" doc:name="HTTP Listener config" doc:id="4054ff69-0dcc-404c-b654-68712341180c" />
 </mule>
