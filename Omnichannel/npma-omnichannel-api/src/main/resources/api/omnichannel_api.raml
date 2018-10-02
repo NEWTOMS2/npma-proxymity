@@ -334,10 +334,10 @@ types:
             type: userRole
             example: !include examples/json_files/user_role.json
         responses: 
-          204:
+          200:
             body: 
               application/json:
-                example: !include examples/json_files/responses/user_role_created.json
+                example: !include examples/json_files/responses/user_role_updated.json
 /organizations:
   get:
     description: Get all organizations

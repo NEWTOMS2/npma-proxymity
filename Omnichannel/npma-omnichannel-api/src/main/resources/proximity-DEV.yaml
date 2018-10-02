@@ -1,7 +1,7 @@
 http:
   omnichannel:
     host: "localhost"
-    port: "8081"
+    port: "8082"
   beacons:
     host: "npma-beacons-experience-api.us-e1.cloudhub.io"
     port: "443"
