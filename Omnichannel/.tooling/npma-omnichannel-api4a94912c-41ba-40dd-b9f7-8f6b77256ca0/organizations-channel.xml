@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="create-organization-flow" doc:id="688bfd85-2650-4ad6-a463-76cf60663aee" >
+		<logger level="INFO" doc:name="Logger" doc:id="3862b6a5-7d33-43bb-9231-26481344f060" />
+		<http:request method="POST" doc:name="organizations-api: POST: /organizations" doc:id="8664eca4-8c72-4408-bee0-67d832b2f593" config-ref="Organizations_HTTPS_Request_configuration" path="/organizations" />
+	</flow>
+	<flow name="get-organization-flow" doc:id="419c4e1b-a755-43b7-bf98-459001ff7db9" >
+		<logger level="INFO" doc:name="Logger" doc:id="77597a03-282a-4a78-80dd-f5ddac52c96b" />
+		<http:request method="GET" doc:name="organizations-api: GET: /organizations/{id_organization}" doc:id="d7e666ae-625f-4c3a-8699-4ff91d7af128" config-ref="Organizations_HTTPS_Request_configuration" path="/organizations/{id_organization}">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="get-organizations-flow" doc:id="fcc6704b-14e8-4529-a35f-a02df6536634" >
+		<logger level="INFO" doc:name="Logger" doc:id="b6cf6532-165c-4682-acb1-fea86f291a8f" />
+		<http:request method="GET" doc:name="organizations-api: GET: /organizations" doc:id="f18b12f7-42d2-4bd7-af75-d82d4874e2c6" config-ref="Organizations_HTTPS_Request_configuration" path="/organizations" />
+	</flow>
+	<flow name="update-organization-flow" doc:id="0f352192-abc1-49c3-966c-d38142db06b8" >
+		<logger level="INFO" doc:name="Logger" doc:id="5df146c1-a6b4-4624-bfca-815c3fea36eb" />
+		<http:request method="PUT" doc:name="organizations-api: PUT: /organizations/{id_organization}" doc:id="6c4eb8bc-59f0-4a7b-a6a1-f9793cefad13" config-ref="Organizations_HTTPS_Request_configuration" path="/organizations/{id_organization}">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+</mule>

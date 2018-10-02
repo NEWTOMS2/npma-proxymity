@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd ">
+    <apikit:config name="omnichannel_api-config" raml="omnichannel_api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <flow name="omnichannel_api-main">
+        <http:listener path="/api/*" config-ref="Omnichannel_HTTP_Listener_config">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="omnichannel_api-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:BAD_REQUEST">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Bad request"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">400</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Method not allowed"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not acceptable"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Unsupported media type"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not Implemented"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="omnichannel_api-console">
+        <http:listener path="/console/*" config-ref="Omnichannel_HTTP_Listener_config">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="omnichannel_api-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="put:\beacons\(id_organization)\place_hierarchy:application\json:omnichannel_api-config">
+        <flow-ref doc:name="update-place-hierarchy-flow" doc:id="ca84ffd9-4888-4df7-b082-df30fa6e6ba3" name="update-place-hierarchy-flow"/>
+    </flow>
+    <flow name="put:\beacons\(id_organization)\hierarchy\(id_beacon_hierarchy):application\json:omnichannel_api-config">
+        <flow-ref doc:name="update-beacon-hierarchy-flow" doc:id="89033234-c084-4f6a-8d81-d9975dac6546" name="update-beacon-hierarchy-flow"/>
+    </flow>
+    <flow name="put:\beacons\(id_organization)\type\(id_beacon_type):application\json:omnichannel_api-config">
+        <flow-ref doc:name="update-place-hierarchy-flow" doc:id="a7ca298a-196f-41c5-888c-a62e3fe193a4" name="update-beacon-type-flow"/>
+    </flow>
+    <flow name="put:\beacons\(id_organization)\(id_beacon):application\json:omnichannel_api-config">
+        <flow-ref doc:name="update-beacon-flow" doc:id="e0772656-3f92-4a63-9e12-a826053590ac" name="update-beacon-flow"/>
+    </flow>
+    <flow name="put:\(id_organization)\content_cards\(id_content_card):application\json:omnichannel_api-config">
+        <flow-ref doc:name="update-content-card-flow" doc:id="5aae3df1-7adf-4805-8fa6-2b412ccc9c4d" name="update-content-card-flow"/>
+    </flow>
+    <flow name="put:\organizations\(id_organization):application\json:omnichannel_api-config">
+        <flow-ref doc:name="update-organization-flow" doc:id="c6eecaa1-69bb-4ed8-811d-9bd49015b0bf" name="update-organization-flow"/>
+    </flow>
+    <flow name="put:\(id_organization)\places\(id_place):application\json:omnichannel_api-config">
+        <flow-ref doc:name="update-place-flow" doc:id="ca7402b3-dcb1-4373-b2e6-4f65f12afe66" name="update-place-flow"/>
+    </flow>
+    <flow name="put:\users\roles\(id_user_role):application\json:omnichannel_api-config">
+        <flow-ref doc:name="update-user-role-flow" doc:id="4cd13bdb-fb72-45cd-b7f8-d9ec3934f3f5" name="update-user-role-flow"/>
+    </flow>
+    <flow name="put:\users\(id_user):application\json:omnichannel_api-config">
+        <flow-ref doc:name="update-user-flow" doc:id="0544f467-9ac3-45f9-9845-4e308e20b618" name="update-user-flow"/>
+    </flow>
+    <flow name="get:\beacons:omnichannel_api-config">
+        <flow-ref doc:name="get-beacons-flow" doc:id="f5d33918-d412-465a-bf98-e3e9b3222be0" name="get-beacons-flow"/>
+    </flow>
+    <flow name="get:\(id_organization)\content_cards:omnichannel_api-config">
+        <flow-ref doc:name="get-content-cards-flow" doc:id="3a8269b1-32b2-4e52-8d76-6b7a68a38c4f" name="get-content-cards-flow"/>
+    </flow>
+    <flow name="get:\beacons\(id_organization)\hierarchy:omnichannel_api-config">
+        <flow-ref doc:name="get-beacons-hierarchy-flow" doc:id="4bfafa3a-e843-4f4e-b869-d671188f44f4" name="get-beacons-hierarchy-flow"/>
+    </flow>
+    <flow name="get:\organizations:omnichannel_api-config">
+        <flow-ref doc:name="get-organizations-flow" doc:id="8bdb9c7b-55d0-4ba8-9ebb-84faa6f8aaae" name="get-organizations-flow"/>
+    </flow>
+    <flow name="get:\beacons\(id_organization)\place_hierarchy:omnichannel_api-config">
+        <flow-ref doc:name="get-place-hierarchy-flow" doc:id="db35ec32-6f82-4624-9b8d-05b67c9799c6" name="get-place-hierarchy-flow"/>
+    </flow>
+    <flow name="get:\(id_organization)\places:omnichannel_api-config">
+        <flow-ref doc:name="get-places-flow" doc:id="b72bc9fd-de93-4b00-8bc5-e0699670a40a" name="get-places-flow"/>
+    </flow>
+    <flow name="get:\users\roles:omnichannel_api-config">
+        <flow-ref doc:name="get-roles-flow" doc:id="2b5666b9-207e-4c3a-8d5b-d1cfd50bfb96" name="get-roles-flow"/>
+    </flow>
+    <flow name="get:\beacons\(id_organization)\type:omnichannel_api-config">
+        <flow-ref doc:name="get-type-flow" doc:id="a36a6cf6-ec0d-45b9-8232-8cb23461665b" name="get-type-flow"/>
+    </flow>
+    <flow name="get:\users:omnichannel_api-config">
+        <flow-ref doc:name="get-users-flow" doc:id="e6d6524a-65a5-4408-86de-483328a853da" name="get-users-flow"/>
+    </flow>
+    <flow name="get:\beacons\(id_organization)\hierarchy\(id_beacon_hierarchy):omnichannel_api-config">
+        <flow-ref doc:name="get-beacon-hierarchy-flow" doc:id="ae05902c-0da2-40b7-aa48-f21273c93f40" name="get-beacon-hierarchy-flow"/>
+    </flow>
+    <flow name="get:\beacons\(id_organization)\type\(id_beacon_type):omnichannel_api-config">
+        <flow-ref doc:name="get-beacon-type-flow" doc:id="918b5481-28b9-424b-ad51-6d8c1f79c2df" name="get-beacon-type-flow"/>
+    </flow>
+    <flow name="get:\beacons\(id_organization)\(id_beacon):omnichannel_api-config">
+        <flow-ref doc:name="get-beacon-flow" doc:id="207bbc3b-cced-4a81-8260-439cdaa9d490" name="get-beacon-flow"/>
+    </flow>
+    <flow name="get:\(id_organization)\content_cards\(id_content_card):omnichannel_api-config">
+        <flow-ref doc:name="get-content-card-flow" doc:id="3a882d88-e1b2-49ae-96da-0da3f7bd1292" name="get-content-card-flow"/>
+    </flow>
+    <flow name="get:\organizations\(id_organization):omnichannel_api-config">
+        <flow-ref doc:name="get-organization-flow" doc:id="2b48dafb-57b6-4b30-8095-f384f5f6126a" name="get-organization-flow"/>
+    </flow>
+    <flow name="get:\beacons\(id_organization):omnichannel_api-config">
+        <flow-ref doc:name="get-beacons-by-organization-flow" doc:id="1f1a9a6b-5172-4efd-bd71-15253e8fe314" name="get-beacons-by-organization-flow"/>
+    </flow>
+    <flow name="get:\(id_organization)\places\(id_place):omnichannel_api-config">
+        <flow-ref doc:name="get-place-flow" doc:id="f49153dd-ff6e-41a3-b351-474bf6f8a1ec" name="get-place-flow"/>
+    </flow>
+    <flow name="get:\users\roles\(id_user_role):omnichannel_api-config">
+        <flow-ref doc:name="get-user-role-flow" doc:id="36817a14-9116-401c-a36e-3375825eb600" name="get-user-role-flow"/>
+    </flow>
+    <flow name="get:\users\(id_user):omnichannel_api-config">
+        <flow-ref doc:name="get-user-flow" doc:id="6fd8cc5b-f814-450d-b1bf-53fee0cdedd0" name="get-user-flow"/>
+    </flow>
+    <flow name="post:\users\access:application\json:omnichannel_api-config">
+        <flow-ref doc:name="validate-access-flow" doc:id="f046d127-7e99-45ac-a748-d23541dc61ed" name="validate-access-flow"/>
+    </flow>
+    <flow name="post:\(id_organization)\content_cards:application\json:omnichannel_api-config">
+        <flow-ref doc:name="create-content-card-flow" doc:id="6382962e-0cb2-4863-9972-fad11bcc859e" name="create-content-card-flow"/>
+    </flow>
+    <flow name="post:\beacons\(id_organization)\hierarchy:application\json:omnichannel_api-config">
+        <flow-ref doc:name="create-hierarchy-flow" doc:id="d48ae8ec-7b09-44a2-ba27-084880d9e110" name="create-hierarchy-flow"/>
+    </flow>
+    <flow name="post:\organizations:application\json:omnichannel_api-config">
+        <flow-ref doc:name="create-organization-flow" doc:id="c124421c-f4f5-4416-be2b-b960f3ab8f96" name="create-organization-flow"/>
+    </flow>
+    <flow name="post:\(id_organization)\places:application\json:omnichannel_api-config">
+        <flow-ref doc:name="create-place-flow" doc:id="a0d7bd1d-6008-479e-ac4e-e54c0b1e2f30" name="create-place-flow"/>
+    </flow>
+    <flow name="post:\users\roles:application\json:omnichannel_api-config">
+        <flow-ref doc:name="create-role-flow" doc:id="8fcc4575-2283-42b6-a21f-e32f1ab86359" name="create-role-flow"/>
+    </flow>
+    <flow name="post:\beacons\(id_organization)\type:application\json:omnichannel_api-config">
+        <flow-ref doc:name="create-type-flow" doc:id="1d412762-b0c5-4f3b-8e69-2b9cb26ff7c6" name="create-type-flow"/>
+    </flow>
+    <flow name="post:\users:application\json:omnichannel_api-config">
+        <flow-ref doc:name="create-users-flow" doc:id="6a761b05-842b-45f4-ad66-f38844b4db9c" name="create-users-flow"/>
+    </flow>
+</mule>

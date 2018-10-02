@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
+	<configuration-properties doc:name="Configuration properties" doc:id="90552d2a-ae08-4e32-9e03-a467ce68be58" file="proximity-${env}.yaml" />
+	<global-property doc:name="Global Property" doc:id="e60a0b1f-1b0a-4eb6-9edc-e7a1373619e1" doc:description="env = DEV" name="env" value="DEV" />
+	<http:listener-config name="Omnichannel_HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="cafbdda8-c2cb-456f-a9d0-e81f19fc0247" >
+		<http:listener-connection host="${http.omnichannel.host}" port="${http.omnichannel.port}">
+		</http:listener-connection>
+	</http:listener-config>
+	<http:request-config name="Beacons_HTTPS_Request_configuration1" doc:name="HTTP Request configuration" doc:id="c9fd4a60-72cf-4a61-8733-5d6fc3254da6" basePath="/api" >
+		<http:request-connection protocol="HTTPS" host="${http.beacons.host}" port="${http.beacons.port}" />
+	</http:request-config>
+	<http:request-config name="Places_HTTPS_Request_configuration" doc:name="HTTP Request configuration" doc:id="359602e5-ab7e-4692-a6b7-d73a919358bb" basePath="/api">
+		<http:request-connection host="${http.places.host}" port="${http.places.port}" protocol="HTTPS"/>
+	</http:request-config>
+	<http:request-config name="Content_cards_HTTPS_Request_configuration" doc:name="HTTP Request configuration" doc:id="9867e7ad-271a-4693-9b97-9ec2b98bf57e" basePath="/api" >
+		<http:request-connection host="${http.contentcards.host}" port="${http.contentcards.port}" protocol="HTTPS"/>
+	</http:request-config>
+	<http:request-config name="Users_HTTPS_Request_configuration" doc:name="HTTP Request configuration" doc:id="9322a196-a2e3-41c1-807b-e093cfafa952" basePath="/api" >
+		<http:request-connection host="${http.users.host}" port="${http.users.port}" protocol="HTTPS"/>
+	</http:request-config>
+	<http:request-config name="Organizations_HTTPS_Request_configuration" doc:name="HTTP Request configuration" doc:id="53e4a7cb-8875-41a3-bd41-6c18ba3a6a97" basePath="/api" >
+		<http:request-connection host="${http.organizations.host}" port="${http.organizations.port}" protocol="HTTPS"/>
+	</http:request-config>
+	<api-gateway:autodiscovery apiId="15539895" doc:name="API Autodiscovery" doc:id="c6ec6ec2-13ae-4206-b07b-5e4bf6749d29" flowRef="omnichannel_api-main" />
+</mule>
