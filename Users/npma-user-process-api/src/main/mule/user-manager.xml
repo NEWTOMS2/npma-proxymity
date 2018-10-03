@@ -18,7 +18,7 @@ output application/java
 ---
 
 	if 
-		(attributes.uriParams.id_user_role == payload.id) 
+		(attributes.uriParams.id_user_role as Number == payload.id as Number) 
 		true 
 	else 
 		false
@@ -26,7 +26,7 @@ output application/java
 ]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<validation:is-true doc:name="Is true" doc:id="e0bd1322-8a86-4aaf-8435-ebf14353e6e7" config-ref="Validation_Config" expression="#[vars.validation_id == true]"/>
+		<validation:is-true doc:name="Is true" doc:id="e0bd1322-8a86-4aaf-8435-ebf14353e6e7" config-ref="Validation_Config" expression="#[vars.id_validation == true]"/>
 		<remove-variable doc:name="Remove Variable" doc:id="1896bb23-dfe0-4f53-9173-b0b15681d86e" variableName="validation_id"/>
 		<http:request method="PUT" doc:name="Request" doc:id="962e25a0-0619-4918-a96d-50a47852f57e" config-ref="User_HTTP_Request_configuration" path="/users/roles/{id_user_role}">
 			<http:uri-params><![CDATA[#[output application/java
@@ -37,7 +37,7 @@ output application/java
 		</http:request>
 		<error-handler >
 			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="af9c4104-c4a9-42d7-93da-00cc8e1a9b95" >
-				<set-payload value='#["error id no coincide entre uriParams y payload"]' doc:name="Set Payload" doc:id="f4b5d8c0-6f2d-453e-85be-60910135696f" />
+				<set-payload value='#["error: does not match id_role uriParams and payload"]' doc:name="Set Payload" doc:id="f4b5d8c0-6f2d-453e-85be-60910135696f" />
 			</on-error-continue>
 		</error-handler>
 	</flow>
