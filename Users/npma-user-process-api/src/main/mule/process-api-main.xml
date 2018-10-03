@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd ">
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
     <apikit:config name="api-config" raml="api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <flow name="api-main">
         <http:listener path="/api/*" config-ref="User_HTTP_Listener_config">
-            <http:response statusCode="#[vars.httpStatus default 200]">
-            </http:response>
+            <http:response statusCode="#[vars.httpStatus default 200]" />
             <http:error-response statusCode="#[vars.httpStatus default 500]">
                 <http:body><![CDATA[#[payload]]]></http:body>
             </http:error-response>
@@ -93,8 +93,7 @@ output application/json
     </flow>
     <flow name="api-console">
         <http:listener path="/console/*" config-ref="User_HTTP_Listener_config">
-            <http:response statusCode="#[vars.httpStatus default 200]">
-            </http:response>
+            <http:response statusCode="#[vars.httpStatus default 200]" />
             <http:error-response statusCode="#[vars.httpStatus default 500]">
                 <http:body><![CDATA[#[payload]]]></http:body>
             </http:error-response>
@@ -117,30 +116,53 @@ output application/json
         </error-handler>
     </flow>
     <flow name="put:\users\roles\(id_user_role):application\json:api-config">
+        <ee:transform doc:name="Transform Message" doc:id="33e32871-8d34-49f9-afb6-2427b2a7f3bd" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="id_validation" ><![CDATA[%dw 2.0
+output application/java
+---
+	if 
+		(attributes.uriParams.id_user_role as Number == payload.id as Number) 
+		true 
+	else 
+		false]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
 		<flow-ref doc:name="update-user-role-flow" doc:id="1c24caa4-86ab-493f-bbe9-1b5f086e270c" name="update-user-role-flow" />
     </flow>
     <flow name="put:\users\(id_user):application\json:api-config">
         <flow-ref doc:name="update-user-flow" doc:id="228779f1-42f6-458e-ba7f-48ea1b462b9d" name="update-user-flow" />
     </flow>
     <flow name="get:\users\roles:api-config">
-		<flow-ref doc:name="get-users-roles-flow" doc:id="ef79265b-f88f-4e70-8676-613721b9a2a6" name="get-users-roles-flow" />
+        <flow-ref doc:name="get-users-roles-flow" doc:id="ef79265b-f88f-4e70-8676-613721b9a2a6" name="get-users-roles-flow" />
     </flow>
     <flow name="get:\users:api-config">
-		<flow-ref doc:name="get-all-users-flow" doc:id="b84850ab-f90d-4f53-ae08-a0a5ec1cfdaa" name="get-all-users-flow" />
+        <flow-ref doc:name="get-all-users-flow" doc:id="b84850ab-f90d-4f53-ae08-a0a5ec1cfdaa" name="get-all-users-flow" />
     </flow>
     <flow name="get:\users\roles\(id_user_role):api-config">
-		<flow-ref doc:name="get-user-role-flow" doc:id="2643e098-701d-4e1e-8206-750c6ce075e4" name="get-user-role-flow" />
+        <flow-ref doc:name="get-user-role-flow" doc:id="2643e098-701d-4e1e-8206-750c6ce075e4" name="get-user-role-flow" />
     </flow>
     <flow name="get:\users\(id_user):api-config">
         <flow-ref doc:name="get-user-by-id-flow" doc:id="ece31069-2212-428b-9388-8e24ee230485" name="get-user-by-id-flow" />
     </flow>
     <flow name="post:\users\access:application\json:api-config">
-		<flow-ref doc:name="validate-credentials-flow" doc:id="3ca2508f-00b9-4d7e-b240-a721eedaa091" name="validate-credentials-flow" />
+        <flow-ref doc:name="validate-credentials-flow" doc:id="3ca2508f-00b9-4d7e-b240-a721eedaa091" name="validate-credentials-flow" />
     </flow>
     <flow name="post:\users\roles:application\json:api-config">
-		<flow-ref doc:name="create-user-role-flow" doc:id="3136df2b-0a27-414e-a32e-75ece12bb300" name="create-user-role-flow" />
+        <flow-ref doc:name="create-user-role-flow" doc:id="3136df2b-0a27-414e-a32e-75ece12bb300" name="create-user-role-flow" />
     </flow>
     <flow name="post:\users:application\json:api-config">
-		<flow-ref doc:name="create-user-flow" doc:id="4e3bb088-e594-4c1d-a8a6-dc1383477f69" name="create-user-flow" />
+        <flow-ref doc:name="create-user-flow" doc:id="4e3bb088-e594-4c1d-a8a6-dc1383477f69" name="create-user-flow" />
+    </flow>
+    <flow name="get:\users\target:api-config">
+		<flow-ref doc:name="get-users-target-flow" doc:id="b4aa1e33-8de3-46ee-9cf6-f7fa37e45355" name="get-users-target-flow" />
+    </flow>
+    <flow name="get:\users\access\info\(id_user):api-config">
+        <flow-ref doc:name="get-info-user-flow" doc:id="61c97962-e712-40f6-b461-4039616f7634" name="get-info-user-flow" />
+    </flow>
+    <flow name="post:\users\target:application\json:api-config">
+		<flow-ref doc:name="create-target-flow" doc:id="321dc508-b597-4470-8b72-6398a6d564aa" name="create-target-flow" />
     </flow>
 </mule>

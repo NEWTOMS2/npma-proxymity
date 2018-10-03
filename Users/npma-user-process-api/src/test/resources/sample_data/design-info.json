@@ -1,0 +1,11 @@
+{
+  "sampleData": {
+    "33e32871-8d34-49f9-afb6-2427b2a7f3bd": {
+      "payload": "sample_data/json.json",
+      "attributes": "sample_data/.dwl"
+    },
+    "2104165e-8d45-4c1a-a020-ac352640affa": {
+      "attributes": "sample_data/defaultstringtype.dwl"
+    }
+  }
+}

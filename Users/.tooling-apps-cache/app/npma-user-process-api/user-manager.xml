@@ -8,26 +8,24 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
 	<validation:config name="Validation_Config" doc:name="Validation Config" doc:id="c699b4f9-f21b-426f-8755-f0f3b9e0e119" />
-	<flow name="update-user-role-flow" doc:id="51d8b84a-8e03-4f71-9a82-3a1dac5a456e" >
-		<ee:transform doc:name="Transform Message" doc:id="2104165e-8d45-4c1a-a020-ac352640affa" >
-			<ee:message >
-			</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="id_validation" ><![CDATA[%dw 2.0
-output application/java
+	<flow name="get-users-target-flow" doc:id="83a64659-cf93-468e-aa81-4bf2a69a04f0" >
+		<http:request method="GET" doc:name="Request" doc:id="7227f937-d754-4957-a0da-500da2b75d07" config-ref="User_HTTP_Request_configuration" path="/users/target" />
+	</flow>
+	<flow name="create-target-flow" doc:id="7e01bff2-a959-4a43-8aaa-503a636dfd38" >
+		<http:request method="POST" doc:name="Request" doc:id="575f5066-3eb3-413d-a8ae-a66ebfa928cd" config-ref="User_HTTP_Request_configuration" path="/users/target" />
+	</flow>
+	<flow name="get-info-user-flow" doc:id="d9b51a55-9ec3-4f8b-826b-41f697a043fc" >
+		<http:request method="GET" doc:name="Request" doc:id="7cf1bcd0-dd03-4e0b-875c-d19c04029f24" config-ref="User_HTTP_Request_configuration" path="/users/access/info/{id_user}">
+			<http:uri-params><![CDATA[#[output application/java
 ---
-
-	if 
-		(attributes.uriParams.id_user_role as Number == payload.id as Number) 
-		true 
-	else 
-		false
-	
-]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
+{
+	"id_user" : attributes.uriParams.id_user
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="update-user-role-flow" doc:id="51d8b84a-8e03-4f71-9a82-3a1dac5a456e" >
 		<validation:is-true doc:name="Is true" doc:id="e0bd1322-8a86-4aaf-8435-ebf14353e6e7" config-ref="Validation_Config" expression="#[vars.id_validation == true]"/>
-		<remove-variable doc:name="Remove Variable" doc:id="1896bb23-dfe0-4f53-9173-b0b15681d86e" variableName="validation_id"/>
+		<remove-variable doc:name="Remove Variable" doc:id="1896bb23-dfe0-4f53-9173-b0b15681d86e" variableName="id_validation"/>
 		<http:request method="PUT" doc:name="Request" doc:id="962e25a0-0619-4918-a96d-50a47852f57e" config-ref="User_HTTP_Request_configuration" path="/users/roles/{id_user_role}">
 			<http:uri-params><![CDATA[#[output application/java
 ---

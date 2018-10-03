@@ -1,46 +1,15 @@
 #%RAML 1.0
-baseUri: https://mocksvc.mulesoft.com/mocks/be07f720-6fa5-46b1-84bb-51036eb7ff45 # 
+baseUri: https://mocksvc.mulesoft.com/mocks/4d71cd9a-0fa1-4e29-8176-5cdb98220155/localhost # baseUri: localhost 
 version: v1
 title: Users Process API
 types: 
-  User:
-    type: object
-    properties: 
-      id?: string
-      id_organization: string
-      id_role: integer
-      user_name: string
-      first_name: string
-      last_name: string
-      email: string
-      password: string
-      active?: boolean
-  Users:
-    type: object
-    properties: 
-      id_user: string
-      user_name: string
-      email: string
-      id_organization: string
-      organization_name: string
-      id_role: integer
-      role: string
-  userAccess:
-   type: object
-   properties:
-    username: 
-      type: string
-      required: true
-    password: 
-      type: string
-      required: true
-  userRole:
-    type: object
-    properties: 
-      id?: integer
-      name: string
-        
-/users:
+  User: !include data_types/user.raml
+  UserInfo : !include data_types/userInfo.raml
+  Users: !include data_types/users.raml  
+  target: !include data_types/target.raml
+  userAccess: !include data_types/userAccess.raml  
+  userRole: !include data_types/userRole.raml
+/users:     
   get:
     queryParameters:
       id_organization?: 
@@ -85,6 +54,15 @@ types:
             application/json:
               example: !include examples/json_files/responses/user_updated.json
   /access:
+    /info:
+      /{id_user}:
+        get:
+          responses:
+            200: 
+              body:   
+                application/json:
+                  type: UserInfo
+                  example: !include examples/json_files/user_info.json
     post:
       body: 
         application/json:
@@ -135,4 +113,25 @@ types:
             body: 
               application/json:
                 example: !include examples/json_files/responses/user_role_created.json
-    
+  /target: 
+    get:
+      queryParameters: 
+        id_customer?: 
+          type: string
+          description: fecth user target 
+      responses: 
+        200:
+          body: 
+            application/json:
+              example: !include examples/json_files/users_target.json     
+    post:
+      description: Create a new user target
+      body: 
+        application/json:
+          type: target
+          example: !include examples/json_files/user_target.json
+      responses: 
+        201:
+          body: 
+            application/json:
+              example: !include examples/json_files/responses/user_created.json   

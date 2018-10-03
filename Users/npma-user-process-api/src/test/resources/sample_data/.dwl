@@ -1,0 +1,28 @@
+%dw 2.0
+output application/java
+---
+{
+	clientCertificate: {
+		publicKey: {
+		},
+		'type': "????",
+		encoded: null
+	},
+	headers: {
+	},
+	listenerPath: "????",
+	method: "????",
+	queryParams: {
+	},
+	queryString: "????",
+	relativePath: "????",
+	remoteAddress: "????",
+	requestPath: "????",
+	requestUri: "????",
+	scheme: "????",
+	uriParams: {
+		"id_user_role":4
+	},
+	version: "????",
+	localAddress: "????"
+}

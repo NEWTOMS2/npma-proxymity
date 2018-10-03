@@ -26,14 +26,4 @@ type role = {|
 type: string]]></types:shape>
     </types:type>
   </types:catalog>
-  <types:enrichment select="#2104165e-8d45-4c1a-a020-ac352640affa">
-    <types:processor-declaration>
-      <types:input-event>
-        <types:message>
-          <types:payload type="role"/>
-          <types:attributes type="id_user_role"/>
-        </types:message>
-      </types:input-event>
-    </types:processor-declaration>
-  </types:enrichment>
 </types:mule>
