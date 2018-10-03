@@ -2,6 +2,7 @@
    "title":"Pharmacy Offers Card",
 	 "idOrganization":"F025BEE7-57E1-451A-BC3B-CA09D177397F",
    "imgUrl":"http://mallxplorer.com/wp-content/uploads/2017/07/Aster-pharmacy-offer-J3-mall-dubai-UAE-600x500.jpg",
+   "imageSourceType": "Url",
    "showCardImage":true,
    "imageSize":"600px",
    "showCardContent":true,
