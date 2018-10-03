@@ -6,7 +6,7 @@
 	<apikit:config name="api-config" raml="api.raml"
 		outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
 	<flow name="api-main">
-		<http:listener path="/api/*" config-ref="User_HTTP_Listener_config">
+		<http:listener path="/api/*" config-ref="Users_HTTP_Listener_config">
 			<http:response statusCode="#[vars.httpStatus default 200]">
 			</http:response>
 			<http:error-response statusCode="#[vars.httpStatus default 500]">
@@ -102,7 +102,7 @@ output application/json
 		</error-handler>
 	</flow>
 	<flow name="api-console">
-		<http:listener path="/console/*" config-ref="User_HTTP_Listener_config">
+		<http:listener path="/console/*" config-ref="Users_HTTP_Listener_config">
 			<http:response statusCode="#[vars.httpStatus default 200]">
 			</http:response>
 			<http:error-response statusCode="#[vars.httpStatus default 500]">

@@ -9,6 +9,24 @@ http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mu
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
 	<validation:config name="Validation_Config" doc:name="Validation Config" doc:id="c699b4f9-f21b-426f-8755-f0f3b9e0e119" />
 	<flow name="update-user-role-flow" doc:id="51d8b84a-8e03-4f71-9a82-3a1dac5a456e" >
+		<ee:transform doc:name="Transform Message" doc:id="2104165e-8d45-4c1a-a020-ac352640affa" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="id_validation" ><![CDATA[%dw 2.0
+output application/java
+---
+
+	if 
+		(attributes.uriParams.id_user_role == payload.id) 
+		true 
+	else 
+		false
+	
+]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<validation:is-true doc:name="Is true" doc:id="cf540e9b-1bb4-4196-9eb3-d1ed38555a4a" config-ref="Validation_Config" message="error validation" expression="#[vars.validation_id]"/>
 		<http:request method="PUT" doc:name="Request" doc:id="962e25a0-0619-4918-a96d-50a47852f57e" config-ref="User_HTTP_Request_configuration" path="/users/roles/{id_user_role}">
 			<http:uri-params><![CDATA[#[output application/java
 ---
