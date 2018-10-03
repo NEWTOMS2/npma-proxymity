@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd  http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+    <http:listener-config name="api-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8081" />
+    </http:listener-config>
+    <apikit:config name="api-config" raml="api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <flow name="api-main">
+        <http:listener config-ref="api-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="api-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:BAD_REQUEST">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Bad request"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">400</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Method not allowed"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not acceptable"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Unsupported media type"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not Implemented"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="api-console">
+        <http:listener config-ref="api-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="api-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="put:\(id_organization)\content_cards\(id_content_card):application\json:api-config">
+        <ee:transform doc:id="5f7ebba3-3ee1-4e58-b79e-b339d5f30e1b">
+            <ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output text/json
+fun booleanToVarbinary(boolean)
+= if (boolean == true ) 1 else 0
+---
+write({
+	idCard: payload.idCard,
+	idCardElements: payload.idCardElements,
+	idCardActions: payload.IdCardActions,
+	title: payload.title,
+	idOrganization: payload.idOrganization,
+	imgUrl: payload.imgUrl,
+	imageSourceType: payload.imageSourceType,
+	showCardImage: booleanToVarbinary(payload.showCardImage),
+	imageSize: payload.imageSize,
+	showCardContent: booleanToVarbinary(payload.showCardContent),
+	htmlContent: payload.htmlContent,
+	showCardActions: booleanToVarbinary(payload.showCardActions),
+	actions: {
+		buttons: payload.actions.buttons map ( button , indexOfButton ) -> {
+			(id: button.id) if (button.id != null),
+			actionLabel: button.actionLabel,
+			contentUrl: button.contentUrl,
+			actionType: button.actionType
+		},
+		showCheckBoxWhatsappNotification: booleanToVarbinary(payload.actions.showCheckBoxWhatsappNotification),
+		showCheckBoxAppNotification: booleanToVarbinary(payload.actions.showCheckBoxAppNotification)
+	}
+},"application/json")]]></ee:set-payload>
+			</ee:message>
+			<ee:variables>
+                <ee:set-variable variableName="id_organization"><![CDATA[attributes.uriParams.id_organization]]></ee:set-variable>
+                <ee:set-variable variableName="id_content_card"><![CDATA[attributes.uriParams.id_content_card]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <logger level="INFO" doc:name="Logger" doc:id="78e90536-952d-4915-aaae-bf136d382c75" message="#[payload]"/>
+		<db:stored-procedure doc:name="updateContentCard" doc:id="7e0cf76d-0f94-45ec-b6ab-59253d7cb0b4" config-ref="Database_Config">
+			<db:sql >{CALL updateContentCard(:json)}</db:sql>
+			<db:input-parameters ><![CDATA[#[
+	{
+		'json': payload as String
+	}
+]]]></db:input-parameters>
+		</db:stored-procedure>
+		<logger level="INFO" doc:name="Logger" doc:id="6e30ff79-08ca-460b-8451-1e11fad17407" />
+		<ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  status: true,
+  message: "a content card has been updated"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="get:\(id_organization)\content_cards:api-config">
+        <ee:transform>
+            <ee:variables>
+                <ee:set-variable variableName="id_organization">attributes.uriParams.id_organization</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <db:stored-procedure doc:name="fecthAllContentCardsByOrganization" doc:id="de5b7539-fe9f-4e6d-9840-59eebf534ee7" config-ref="Database_Config">
+            <db:sql>{CALL fecthAllContentCardsByOrganization(:idOrganization)}</db:sql>
+            <db:input-parameters><![CDATA[#[
+	{
+		'idOrganization': vars.id_organization
+	}
+]]]></db:input-parameters>
+        </db:stored-procedure>
+        <flow-ref doc:name="serialize_result_set" doc:id="c556ee89-9086-4168-8f05-9063d64b5efb" name="serialize_result_set"/>
+    </flow>
+    <flow name="get:\(id_organization)\content_cards\(id_content_card):api-config">
+        <ee:transform>
+            <ee:variables>
+                <ee:set-variable variableName="id_organization">attributes.uriParams.id_organization</ee:set-variable>
+                <ee:set-variable variableName="id_content_card">attributes.uriParams.id_content_card</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <db:stored-procedure doc:name="fecthContentCardById" doc:id="afc83108-73ab-44a5-aeb0-8a7acd1ac07e" config-ref="Database_Config">
+			<db:sql >{CALL fecthContentCardById(:id)}</db:sql>
+			<db:input-parameters ><![CDATA[#[
+	{
+		'id': vars.id_content_card
+	}
+]]]></db:input-parameters>
+		</db:stored-procedure>
+		<flow-ref doc:name="serialize_result_set" doc:id="c938e274-4432-4ec0-91cb-d16ea281c83d" name="serialize_result_set"/>
+    </flow>
+    <flow name="post:\(id_organization)\content_cards:application\json:api-config">
+        <ee:transform doc:id="22826f2f-4786-4e7a-9d4d-9b3e2e03ff69">
+            <ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output text/json
+fun booleanToVarbinary(boolean)
+= if (boolean == true ) 1 else 0
+---
+write({
+	title: payload.title,
+	idOrganization: payload.idOrganization,
+	imgUrl: payload.imgUrl,
+	imageSourceType: payload.imageSourceType,
+	showCardImage: booleanToVarbinary(payload.showCardImage),
+	imageSize: payload.imageSize,
+	showCardContent: booleanToVarbinary(payload.showCardContent),
+	htmlContent: payload.htmlContent,
+	showCardActions: booleanToVarbinary(payload.showCardActions),
+	actions: {
+		buttons: payload.actions.buttons map ( button , indexOfButton ) -> {
+			actionLabel: button.actionLabel,
+			contentUrl: button.contentUrl,
+			actionType: button.actionType
+		},
+		showCheckBoxWhatsappNotification: booleanToVarbinary(payload.actions.showCheckBoxWhatsappNotification),
+		showCheckBoxAppNotification: booleanToVarbinary(payload.actions.showCheckBoxAppNotification)
+	}
+},"application/json")]]></ee:set-payload>
+			</ee:message>
+			<ee:variables>
+                <ee:set-variable variableName="id_organization"><![CDATA[attributes.uriParams.id_organization]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+		<db:stored-procedure doc:name="insertContentCard" doc:id="bd7679a0-bf4e-4703-a230-6e5aba17fba6" config-ref="Database_Config">
+			<db:sql >{CALL insertContentCard(:json)}</db:sql>
+			<db:input-parameters ><![CDATA[#[
+	{
+		'json': payload as String
+	}
+]]]></db:input-parameters>
+		</db:stored-procedure>
+		<ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  status: true,
+  message: "a new content card has been created"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+</mule>
