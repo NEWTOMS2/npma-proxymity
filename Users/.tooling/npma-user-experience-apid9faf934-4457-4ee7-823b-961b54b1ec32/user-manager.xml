@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:validation="http://www.mulesoft.org/schema/mule/validation"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+	<validation:config name="Validation_Config" doc:name="Validation Config" doc:id="c699b4f9-f21b-426f-8755-f0f3b9e0e119" />
+	<flow name="get-user-info-flow" doc:id="0c6147bf-e402-4b13-9550-d91ab74379a4" >
+		<http:request method="GET" doc:name="Request" doc:id="8e93a8f7-0c6e-420b-892d-24e1ce925b17" config-ref="HTTP_Request_configuration" path="/users/access/info/{id_user}" />
+	</flow>
+	<flow name="get-targets-flow" doc:id="f4aaeb7e-698b-4445-98e1-d912668a2f8f" >
+		<http:request method="GET" doc:name="Request" doc:id="e9547bd5-fece-480b-845e-fd0a4becca8d" config-ref="HTTP_Request_configuration" path="/users/target" />
+	</flow>
+	<flow name="get-users-target-flow" doc:id="83a64659-cf93-468e-aa81-4bf2a69a04f0" >
+		<http:request method="GET" doc:name="Request" doc:id="7227f937-d754-4957-a0da-500da2b75d07" config-ref="User_HTTP_Request_configuration" path="/users/target" />
+	</flow>
+	<flow name="create-target-flow" doc:id="7e01bff2-a959-4a43-8aaa-503a636dfd38" >
+		<http:request method="POST" doc:name="Request" doc:id="575f5066-3eb3-413d-a8ae-a66ebfa928cd" config-ref="User_HTTP_Request_configuration" path="/users/target" />
+	</flow>
+	<flow name="get-info-user-flow" doc:id="d9b51a55-9ec3-4f8b-826b-41f697a043fc" >
+		<http:request method="GET" doc:name="Request" doc:id="7cf1bcd0-dd03-4e0b-875c-d19c04029f24" config-ref="User_HTTP_Request_configuration" path="/users/access/info/{id_user}">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_user" : attributes.uriParams.id_user
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="update-user-role-flow" doc:id="51d8b84a-8e03-4f71-9a82-3a1dac5a456e" >
+		<http:request method="PUT" doc:name="Request" doc:id="962e25a0-0619-4918-a96d-50a47852f57e" config-ref="User_HTTP_Request_configuration" path="/users/roles/{id_user_role}">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_user_role" : attributes.uriParams.id_user_role
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="get-user-role-flow" doc:id="6316b6c1-a905-4966-925c-42184ee8609f" >
+		<http:request method="GET" doc:name="Request" doc:id="ca8fd19e-45af-4406-bfa7-884386802320" config-ref="User_HTTP_Request_configuration" path="/users/roles/{id_user_role}">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_user_role" : attributes.uriParams.id_user_role
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="create-user-role-flow" doc:id="f3991fcf-41ff-4cf0-a2ac-f650a29f554d" >
+		<http:request method="POST" doc:name="Request" doc:id="b33542df-f15b-46b3-b822-76b0a92ef115" config-ref="User_HTTP_Request_configuration" path="/users/roles" />
+	</flow>
+	<flow name="get-users-roles-flow" doc:id="efb376a0-980f-4637-9328-3c67277baee2" >
+		<http:request method="GET" doc:name="Request" doc:id="99a3557b-9143-4ea5-8219-8589c1839096" config-ref="User_HTTP_Request_configuration" path="/users/roles" >
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"id_user_role" : "Value"
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="validate-credentials-flow" doc:id="edf3d6b8-bcc8-4d1e-854c-799b500dc301" >
+		<http:request method="POST" doc:name="Request" doc:id="33a0c39c-f017-415e-82d7-1dc0e3e9467e" config-ref="User_HTTP_Request_configuration" path="/users/access"/>
+	</flow>
+	<flow name="update-user-flow" doc:id="d23181c9-96b1-46e3-823a-de4fd86e6e70" >
+		<http:request method="PUT" doc:name="Request" doc:id="f92640ad-6363-40da-b0ab-0092ee389e5b" config-ref="User_HTTP_Request_configuration" path="/users/{id_user}">
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"id_user" : attributes.uriParams.id_user
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="get-user-by-id-flow" doc:id="ddb42ef3-44e8-40c7-8ede-f2ee61d8b199" >
+		<http:request method="GET" doc:name="Request" doc:id="5c14e9c7-80de-4e41-a808-0d04a7dcd148" config-ref="User_HTTP_Request_configuration" path="/users/{id_user}">
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"id_user" : attributes.uriParams.id_user
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="create-user-flow" doc:id="1a11fe42-93be-43e7-ba69-2f7930f143c5" >
+		<http:request method="POST" doc:name="Request" doc:id="3f93693a-0a88-4900-8078-7cf21b7e0b34" config-ref="User_HTTP_Request_configuration" path="/users"/>
+	</flow>
+	<flow name="get-all-users-flow" doc:id="bac72930-ea91-4b86-8d35-498b546a12ba" >
+		<choice doc:name="Choice" doc:id="51c468ee-f190-431f-bcbb-b428dda0f8fe">
+			<when expression="attributes.queryParams.id_organization != null">
+				<http:request method="GET" doc:name="Request" doc:id="a7eb4ac4-6ab9-4bfb-8587-824af0013723" config-ref="User_HTTP_Request_configuration" path="/users">
+			<http:query-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.queryParams.id_organization
+}]]]></http:query-params>
+		</http:request>
+			</when>
+			<otherwise >
+				<http:request method="GET" doc:name="Request" doc:id="22127217-c9c3-49e6-94ea-d00fb0eef008" config-ref="User_HTTP_Request_configuration" path="/users">
+		</http:request>
+			</otherwise>
+		</choice>
+	</flow>
+</mule>
