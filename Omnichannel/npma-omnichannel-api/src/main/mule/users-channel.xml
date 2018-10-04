@@ -20,7 +20,41 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	</flow>
 	<flow name="get-target-flow" doc:id="5f616b25-5cca-4630-ba63-dde6e6a2e625" >
 		<logger level="INFO" doc:name="Logger" doc:id="334ffce3-d80d-4ebd-9096-e57cbfda4f6c" message="#[message]"/>
-		<http:request method="GET" doc:name="users-api: GET: /users/target" doc:id="234ececf-2aac-44a1-b446-0eb22c6e233a" config-ref="Users_HTTP_Request_configuration" path="/users/target" />
+		<choice doc:name="Choice" doc:id="edad5ca6-d328-47da-9b03-402f7bcedaa6" >
+			<when expression="#[(attributes.queryParams.id_target != null) and (attributes.queryParams.id_organization == null) and (attributes.queryParams.id_content_card == null)]">
+				<http:request method="GET" doc:name="users-api: GET: /users/target?id_target" doc:id="234ececf-2aac-44a1-b446-0eb22c6e233a" config-ref="Users_HTTP_Request_configuration" path="/users/target">
+			<http:query-params><![CDATA[#[output application/java
+---
+{
+	"id_target" : attributes.queryParams.id_target
+}]]]></http:query-params>
+		</http:request>
+			</when>
+			<when expression="#[(attributes.queryParams.id_target == null) and (attributes.queryParams.id_organization != null) and (attributes.queryParams.id_content_card == null)]">
+				<http:request method="GET" doc:name="Copy_of_users-api: GET: /users/target?id_organization" doc:id="baaa0f67-4503-4d2b-87b5-71906f637cb0" config-ref="Users_HTTP_Request_configuration" path="/users/target">
+					<http:query-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.queryParams.id_organization
+}]]]></http:query-params>
+				</http:request>
+			</when>
+			<when expression="#[(attributes.queryParams.id_target == null) and (attributes.queryParams.id_organization == null) and (attributes.queryParams.id_content_card != null)]">
+				<http:request method="GET" doc:name="users-api: GET: /users/target?id_content_card" doc:id="6b3e3ea9-5d36-4761-8457-bb1a1244474b" config-ref="Users_HTTP_Request_configuration" path="/users/target">
+					<http:query-params><![CDATA[#[output application/java
+---
+{
+	"id_content_card" : attributes.queryParams.id_content_card
+}]]]></http:query-params>
+				</http:request>
+			</when>
+			<when expression="#[(attributes.queryParams.id_target == null) and (attributes.queryParams.id_organization == null) and (attributes.queryParams.id_content_card == null)]">
+				<http:request method="GET" doc:name="users-api: GET: /users/target" doc:id="cd89467c-519c-4bb2-bf8a-44daa0804675" config-ref="Users_HTTP_Request_configuration" path="/users/target"/>
+			</when>
+			<otherwise>
+				<set-payload value='#["error: invalid query parameter"]' doc:name="Set Payload" doc:id="da5bbbb1-334a-482b-8480-c37491b651be" />
+			</otherwise>
+		</choice>
 	</flow>
 	<flow name="create-users-flow" doc:id="f89213d9-6def-47a8-a1ba-820b8888276d" >
 		<logger level="INFO" doc:name="Logger" doc:id="22976db5-fd50-4971-bab7-cf21782c990c" message="#[payload]"/>

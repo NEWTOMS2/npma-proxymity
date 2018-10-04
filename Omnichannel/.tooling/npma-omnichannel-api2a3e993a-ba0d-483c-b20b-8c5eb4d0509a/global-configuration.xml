@@ -31,4 +31,7 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 		<http:request-connection host="${http.contentcards.host}" port="${http.contentcards.port}" protocol="HTTPS"/>
 	</http:request-config>
 	<api-gateway:autodiscovery apiId="15539895" doc:name="API Autodiscovery" doc:id="04ffa7b3-20be-4436-a8a6-6452bc25502d" flowRef="omnichannel_api-main" />
+	<http:listener-config name="LOCAL_HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="da059c11-b47d-406a-8731-fe11d097f03b" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
 </mule>

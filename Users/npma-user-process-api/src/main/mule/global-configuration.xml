@@ -9,7 +9,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	<http:listener-config name="User_HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="3eb46847-2204-427f-9b02-516b97618575" >
 		<http:listener-connection host="${http.process.host}" port="${http.process.port}" />
 	</http:listener-config>
-	<http:request-config name="User_HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="447a1dd3-2c7f-42fc-a3c8-a4fe91129d5d" basePath="/api" >
+	<http:request-config name="Users_HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="447a1dd3-2c7f-42fc-a3c8-a4fe91129d5d" basePath="/api" >
 		<http:request-connection host="${http.system.host}" port="${http.system.port}" />
 	</http:request-config>
 </mule>
