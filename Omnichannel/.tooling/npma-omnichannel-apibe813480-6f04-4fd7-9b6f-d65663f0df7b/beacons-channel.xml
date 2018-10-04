@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="create-type-flow" doc:id="93b19dc3-8ff3-4490-ba90-f6277bfe3aef" >
+		<logger level="INFO" doc:name="Logger" doc:id="7e627321-4626-4f57-a0b0-96728bcd2ecb" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]"/>
+		<http:request method="POST" doc:name="beacons-api: POST: /beacons/{id_organization}/type" doc:id="55eec136-e44f-4e02-becf-af7dd0afe95f" config-ref="Beacons_HTTP_Request_configuration" path="/beacons/{id_organization}/type">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="create-hierarchy-flow" doc:id="8a0230ff-2016-4ada-9012-528808ce0557" >
+		<logger level="INFO" doc:name="Logger" doc:id="499a78b2-fa3e-41ef-90f5-40f6c72209d2" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]" />
+		<http:request method="POST" doc:name="beacons-api: POST: /beacons/{id_organization}/hierarchy" doc:id="b9d96021-4e5b-4671-90cf-5962fc295d7e" config-ref="Beacons_HTTP_Request_configuration" path="/beacons/{id_organization}/hierarchy">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="get-beacons-by-organization-flow" doc:id="6ed76026-eff0-4c76-b28a-470a21b33a2f" >
+		<logger level="INFO" doc:name="Logger" doc:id="9917ab93-95b3-4958-adf0-1a83191e2a65" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]" />
+		<http:request method="GET" doc:name="beacons-api: GET: /beacons/{id_organization}" doc:id="705d7892-dcd7-49c2-9d45-2112571a5554" path="/beacons/{id_organization}" config-ref="Beacons_HTTP_Request_configuration">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="get-beacon-flow" doc:id="1e84f7ff-1491-426c-b153-acbcc51169de" >
+		<logger level="INFO" doc:name="Logger" doc:id="73fc6f56-d8ac-4901-8f0a-5d009f58ea76" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]" />
+		<http:request method="GET" doc:name="beacons-api GET: /beacons/{id_organization}/{id_beacon}" doc:id="d9b8c4b4-4cc6-4272-9b11-494011d0dea0" path="/beacons/{id_organization}/{id_beacon}" config-ref="Beacons_HTTP_Request_configuration">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization,
+	"id_beacon" : attributes.uriParams.id_beacon
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="get-beacon-type-flow" doc:id="6f744665-dff6-4ca5-a835-145074ebaae4" >
+		<logger level="INFO" doc:name="Logger" doc:id="e7d296d7-de8f-4588-ac35-a2acaec8f74b" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]" />
+		<http:request method="GET" doc:name="beacons-api: GET: /beacons/{id_organization}/type/{id_beacon_type}" doc:id="24c9acb8-515d-4be6-b38c-46168b0ecc77" config-ref="Beacons_HTTP_Request_configuration" path="/beacons/{id_organization}/type/{id_beacon_type}">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization,
+	"id_beacon_type" : attributes.uriParams.id_beacon_type
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="get-beacon-hierarchy-flow" doc:id="88afa84d-977c-4383-9911-ef9846cdf64b" >
+		<logger level="INFO" doc:name="Logger" doc:id="2d286a3a-67b7-4643-8f8a-b51c86b67f6f" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]" />
+		<http:request method="GET" doc:name="beacons-api: GET: /beacons/{id_organization}/hierarchy/{id_beacon_hierarchy}" doc:id="b238ee98-bd2f-4067-9f16-0190492d336f" config-ref="Beacons_HTTP_Request_configuration" path="/beacons/{id_organization}/hierarchy/{id_beacon_hierarchy}">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization,
+	"id_beacon_hierarchy" : attributes.uriParams.id_beacon_hierarchy
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="get-type-flow" doc:id="188333c4-3f61-4f06-9720-70c4fb11daf4" >
+		<logger level="INFO" doc:name="Logger" doc:id="b2df2226-4a4d-4c1f-89ea-9f37c0787c4e" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]" />
+		<http:request method="GET" doc:name="beacons-api: GET: /beacons/{id_organization}/type" doc:id="78381e54-8991-4971-b5bc-8fbd499fc2c3" config-ref="Beacons_HTTP_Request_configuration" path="/beacons/{id_organization}/type">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="get-place-hierarchy-flow" doc:id="b188e485-179f-4745-b5b4-8f49bff8074e" >
+		<logger level="INFO" doc:name="Logger" doc:id="25462087-9761-4798-8dbc-c52caaa6070a" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]" />
+		<http:request method="GET" doc:name="beacons-api: GET: /beacons/{id_organization}/place_hierarchy" doc:id="b7dc2086-37c9-4119-81d7-3de3d369b269" config-ref="Beacons_HTTP_Request_configuration" path="/beacons/{id_organization}/place_hierarchy">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="get-beacons-hierarchy-flow" doc:id="900af4a6-b5ba-4e8a-8824-29ddc7d181d0" >
+		<logger level="INFO" doc:name="Logger" doc:id="97141f9e-c57c-43e9-840d-0bde24241d2e" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]" />
+		<http:request method="GET" doc:name="beacons-api: GET: /beacons/{id_organization}/hierarchy" doc:id="bf5ff74a-940b-477e-bb51-5df91625dff0" config-ref="Beacons_HTTP_Request_configuration" path="/beacons/{id_organization}/hierarchy">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="get-beacons-flow" doc:id="851a9bbb-e07c-4db5-a552-3c9ab897ec4a" >
+		<logger level="INFO" doc:name="Logger" doc:id="af4da992-650f-44cc-9b2b-65eca43bda35" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]" />
+		<http:request method="GET" doc:name="beacons-api: GET: /beacons" doc:id="fe4246a6-9a47-4fcb-8680-c18733a74d50" path="/beacons" config-ref="Beacons_HTTP_Request_configuration" />
+	</flow>
+	<flow name="update-beacon-hierarchy-flow" doc:id="876be5e2-3710-4c5f-ae64-b5d151f14fd5" >
+		<logger level="INFO" doc:name="Logger" doc:id="71811a42-53f1-4aba-a69a-74e09251f7db" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]" />
+		<http:request method="PUT" doc:name="beacons-api: PUT: /beacons/{id_organization}/hierarchy/{id_beacon_hierarchy}" doc:id="797a61bc-bab3-4247-a036-68efbbed4b95" config-ref="Beacons_HTTP_Request_configuration" path="/beacons/{id_organization}/hierarchy/{id_beacon_hierarchy}">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization,
+	"id_beacon_hierarchy" : attributes.uriParams.id_beacon_hierarchy
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="update-place-hierarchy-flow" doc:id="7243a462-8fbe-405e-975d-9019188ef94f">
+		<logger level="INFO" doc:name="Logger" doc:id="5fb9988c-0cc5-4098-b002-2a1188b0e947" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]" />
+		<http:request method="PUT" doc:name="beacons-api: PUT: /beacons/{id_organization}/place_hierarchy?operation&amp;id" doc:id="d715402c-b940-4b29-8285-bbf5674567c3" config-ref="Beacons_HTTP_Request_configuration" path="/beacons/{id_organization}/place_hierarchy">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization
+}]]]></http:uri-params>
+			<http:query-params><![CDATA[#[output application/java
+---
+{
+	"operation" : attributes.queryParams.operation,
+	"id" : attributes.queryParams.id
+}]]]></http:query-params>
+		</http:request>
+	</flow>
+	<flow name="update-beacon-type-flow" doc:id="e45b5c89-a7ea-49f6-86d4-e95aeaa17df6" >
+		<logger level="INFO" doc:name="Logger" doc:id="df6f96af-fde0-4e3a-9f48-f16d09b4fe49" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]" />
+		<http:request method="PUT" doc:name="beacons-api: PUT: /beacons/{id_organization}/type/{id_beacon_type}" doc:id="fb8bce33-7da5-4c03-98b0-da04d34a027c" config-ref="Beacons_HTTP_Request_configuration" path="/beacons/{id_organization}/type/{id_beacon_type}">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization,
+	"id_beacon_type" : attributes.uriParams.id_beacon_type
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="update-beacon-flow" doc:id="8a6cebee-4587-429a-b0c1-f2fa2e9bccd1" >
+		<logger level="INFO" doc:name="Logger" doc:id="bd9cec2d-805a-47f3-8375-4805c772a9cc" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]" />
+		<http:request method="PUT" doc:name="beacons-api PUT: /beacons/{id_organization}/{id_beacon}" doc:id="5d66eb65-9a84-4906-8e52-cd12d0729af4" config-ref="Beacons_HTTP_Request_configuration" path="/beacons/{id_organization}/{id_beacon}">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization,
+	"id_beacon" : attributes.uriParams.id_beacon
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+</mule>

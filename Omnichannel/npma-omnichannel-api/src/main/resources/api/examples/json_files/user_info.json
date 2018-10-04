@@ -7,7 +7,5 @@
     "user_name": "userdemo",
     "first_name": "Jhon",
     "last_name": "Doe",
-    "password": "hallo!demo01",
-    "email": "jhondoe@foo.com",
-    "active": true
+    "email": "jhondoe@foo.com"
   }

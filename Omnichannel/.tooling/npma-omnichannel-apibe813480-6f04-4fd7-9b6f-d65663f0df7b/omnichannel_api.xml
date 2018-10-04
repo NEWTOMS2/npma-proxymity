@@ -2,7 +2,7 @@
 <mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd ">
     <apikit:config name="omnichannel_api-config" raml="omnichannel_api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <flow name="omnichannel_api-main">
-        <http:listener path="/api/*" config-ref="Omnichannel_HTTPS_Listener_config">
+        <http:listener path="/api/*" config-ref="Omnichannel_HTTP_Listener_config">
             <http:response statusCode="#[vars.httpStatus default 200]" />
             <http:error-response statusCode="#[vars.httpStatus default 500]">
                 <http:body><![CDATA[#[payload]]]></http:body>
@@ -91,7 +91,7 @@ output application/json
         </error-handler>
     </flow>
     <flow name="omnichannel_api-console">
-        <http:listener path="/console/*" config-ref="Omnichannel_HTTPS_Listener_config">
+        <http:listener path="/console/*" config-ref="Omnichannel_HTTP_Listener_config">
             <http:response statusCode="#[vars.httpStatus default 200]" />
             <http:error-response statusCode="#[vars.httpStatus default 500]">
                 <http:body><![CDATA[#[payload]]]></http:body>
@@ -121,7 +121,7 @@ output application/json
         <flow-ref doc:name="update-beacon-hierarchy-flow" doc:id="89033234-c084-4f6a-8d81-d9975dac6546" name="update-beacon-hierarchy-flow" />
     </flow>
     <flow name="put:\beacons\(id_organization)\type\(id_beacon_type):application\json:omnichannel_api-config">
-        <flow-ref doc:name="update-beacon-type-flow" doc:id="a7ca298a-196f-41c5-888c-a62e3fe193a4" name="update-beacon-type-flow" />
+        <flow-ref doc:name="update-place-hierarchy-flow" doc:id="a7ca298a-196f-41c5-888c-a62e3fe193a4" name="update-beacon-type-flow" />
     </flow>
     <flow name="put:\beacons\(id_organization)\(id_beacon):application\json:omnichannel_api-config">
         <flow-ref doc:name="update-beacon-flow" doc:id="e0772656-3f92-4a63-9e12-a826053590ac" name="update-beacon-flow" />
