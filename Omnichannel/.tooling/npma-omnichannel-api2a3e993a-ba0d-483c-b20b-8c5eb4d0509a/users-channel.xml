@@ -48,9 +48,6 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 }]]]></http:query-params>
 				</http:request>
 			</when>
-			<when expression="#[(attributes.queryParams.id_target == null) and (attributes.queryParams.id_organization == null) and (attributes.queryParams.id_content_card == null)]">
-				<http:request method="GET" doc:name="users-api: GET: /users/target" doc:id="cd89467c-519c-4bb2-bf8a-44daa0804675" config-ref="Users_HTTP_Request_configuration" path="/users/target"/>
-			</when>
 			<otherwise>
 				<set-payload value='#["error: invalid query parameter"]' doc:name="Set Payload" doc:id="da5bbbb1-334a-482b-8480-c37491b651be" />
 			</otherwise>

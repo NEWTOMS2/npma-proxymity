@@ -11,11 +11,14 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
 			<tls:context >
 				<tls:key-store type="jks" path="keystore.jks" keyPassword="password" password="password" />
 			</tls:context>
+			<tls:context >
+				<tls:key-store type="jks" path="keystore.jks" keyPassword="password" password="password" />
+			</tls:context>
 		</http:listener-connection>
 	</http:listener-config>
 	<configuration-properties doc:name="Configuration properties" doc:id="32da85a8-59c8-4c27-99c2-365235063fe5" file="beacons-${env}.yaml" />
 	<global-property doc:name="Global Property" doc:id="0c9e9f31-1567-4d83-b763-6f72361e9712" name="env" value="DEV" />
-	<http:request-config name="Users_HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="9da2374b-d60a-4a09-bac5-141fee74c3e6" basePath="/api" >
+	<http:request-config name="User_HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="9da2374b-d60a-4a09-bac5-141fee74c3e6" basePath="/api" >
 		<http:request-connection host="${http.process.host}" port="${http.process.port}" />
 	</http:request-config>
 	<api-gateway:autodiscovery apiId="15535060" doc:name="API Autodiscovery" doc:id="36f47803-c140-44c3-b1e4-e8e7296c04e6" flowRef="api-main" />

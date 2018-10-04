@@ -11,6 +11,9 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 			<tls:context >
 				<tls:key-store type="jks" path="keystore.jks" keyPassword="password" password="password" />
 			</tls:context>
+			<tls:context >
+				<tls:key-store type="jks" path="keystore.jks" keyPassword="password" password="password" />
+			</tls:context>
 		</http:listener-connection>
 	</http:listener-config>
 	<http:request-config name="Beacons_HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="1cbd45b7-cb02-4b57-8ce1-48fadeeac15f" basePath="/api" >

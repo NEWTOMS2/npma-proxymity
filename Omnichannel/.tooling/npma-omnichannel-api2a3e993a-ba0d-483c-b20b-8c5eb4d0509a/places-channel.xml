@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="update-place-flow" doc:id="2ef45b34-44a7-4a5d-a221-5643a4ba6501" >
+		<logger level="INFO" doc:name="Logger" doc:id="0160b84a-d43a-40c9-99af-c2fb4c80fab8" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]"/>
+		<http:request method="PUT" doc:name="api-places: PUT: /{id_organization}/places/{id_place}" doc:id="a9371539-c712-4c1a-8f46-86196f1a1eac" config-ref="Places_HTTP_Request_configuration" path="/{id_organization}/places/{id_place}">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization,
+	"id_place" : attributes.uriParams.id_place
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="create-place-flow" doc:id="b27d853d-c849-4885-a5e3-7ac0d2b263fd" >
+		<logger level="INFO" doc:name="Logger" doc:id="37c40b54-5b30-4e33-a7f6-542f7a5ed342" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]"/>
+		<http:request method="POST" doc:name="api-places: POST: /{id_organization}/places" doc:id="cda415a6-74ce-43a2-a223-d35c018c5bf2" config-ref="Places_HTTP_Request_configuration" path="/{id_organization}/places">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="get-place-flow" doc:id="fed99c7d-b4ce-4a63-9aae-8fc0456004ae" >
+		<logger level="INFO" doc:name="Logger" doc:id="53dbb5a0-b60d-4370-9557-9fd1f5e29a2d" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]"/>
+		<http:request method="GET" doc:name="api-places: GET: /{id_organization}/places/{id_place}" doc:id="a3488ec1-1275-4458-9919-e39e2ac7dffb" config-ref="Places_HTTP_Request_configuration" path="/{id_organization}/places/{id_place}">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization,
+	"id_place" : attributes.uriParams.id_place
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow name="get-places-flow" doc:id="dd8b1e1a-6738-4cf3-991b-41ad130cbbf2" >
+		<logger level="INFO" doc:name="Logger" doc:id="5416e17a-3762-459b-8006-ce6cb23bc784" message="#[{payload: payload, queryParams: attributes.queryParams, uriParams: attributes.uriParams}]"/>
+		<http:request method="GET" doc:name="api-places: GET: /{id_organization}/places" doc:id="0c70cf10-d5b5-472d-950c-c7441d75f3f9" config-ref="Places_HTTP_Request_configuration" path="/{id_organization}/places">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id_organization" : attributes.uriParams.id_organization
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+</mule>
