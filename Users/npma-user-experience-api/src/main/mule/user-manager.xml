@@ -9,7 +9,13 @@ http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mu
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
 	<validation:config name="Validation_Config" doc:name="Validation Config" doc:id="c699b4f9-f21b-426f-8755-f0f3b9e0e119" />
 	<flow name="get-user-info-flow" doc:id="0c6147bf-e402-4b13-9550-d91ab74379a4" >
-		<http:request method="GET" doc:name="Request" doc:id="8e93a8f7-0c6e-420b-892d-24e1ce925b17" config-ref="Users_HTTP_Request_configuration" path="/users/access/info/{id_user}" />
+		<http:request method="GET" doc:name="Request" doc:id="8e93a8f7-0c6e-420b-892d-24e1ce925b17" config-ref="Users_HTTP_Request_configuration" path="/users/access/info/{id_user}" >
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"id_user" : attributes.uriParams.id_user
+}]]]></http:uri-params>
+		</http:request>
 	</flow>
 	<flow name="get-targets-flow" doc:id="f4aaeb7e-698b-4445-98e1-d912668a2f8f" >
 		<choice doc:name="Choice" doc:id="1f828d77-1869-47d2-8cfc-cab09100d1ce" >
