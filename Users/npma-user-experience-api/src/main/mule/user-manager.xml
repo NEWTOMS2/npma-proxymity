@@ -89,11 +89,6 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 	</flow>
 	<flow name="get-users-roles-flow" doc:id="efb376a0-980f-4637-9328-3c67277baee2" >
 		<http:request method="GET" doc:name="Request" doc:id="99a3557b-9143-4ea5-8219-8589c1839096" config-ref="Users_HTTP_Request_configuration" path="/users/roles" >
-			<http:uri-params ><![CDATA[#[output application/java
----
-{
-	"id_user_role" : "Value"
-}]]]></http:uri-params>
 		</http:request>
 	</flow>
 	<flow name="validate-credentials-flow" doc:id="edf3d6b8-bcc8-4d1e-854c-799b500dc301" >
