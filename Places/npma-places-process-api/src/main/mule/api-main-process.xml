@@ -118,7 +118,16 @@ output application/json
         </error-handler>
     </flow>
     <flow name="put:\(id_organization)\places\(id_place):application\json:api-config">
-        <flow-ref doc:name="update-place-flow" doc:id="7d460541-f082-4e65-b082-b2ce41086dbd" name="update-place-flow"/>
+		<ee:transform doc:name="Transform Message" doc:id="f89f151a-ce8f-4672-a40f-723e9311433a" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<flow-ref doc:name="update-place-flow" doc:id="7d460541-f082-4e65-b082-b2ce41086dbd" name="update-place-flow"/>
     </flow>
     <flow name="get:\(id_organization)\places:api-config">
         <flow-ref doc:name="get-places-by-organization-flow" doc:id="4098a833-97a5-4df2-aacd-934f3df56eb6" name="get-places-by-organization-flow"/>
