@@ -3,6 +3,6 @@
   "id_organization": "ECB11EDB-3860-4733-9096-DC67FEDAD127",
   "name": "Front Store",
   "address": "8000 West Broad Street, Richmond, Virginia, USA",
-  "latitude": "37.6246003",
-  "longitude": "-77.5284526"
+  "lat": "37.6246003",
+  "lng": "-77.5284526"
 }

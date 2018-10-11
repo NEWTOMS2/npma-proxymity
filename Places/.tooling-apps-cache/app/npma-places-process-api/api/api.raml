@@ -1,7 +1,7 @@
 #%RAML 1.0
-baseUri: https://mocksvc.mulesoft.com/mocks/976e8f41-7015-44b3-9db6-40ad322b72dd # 
+baseUri: https://mocksvc.mulesoft.com/mocks/b62225e9-3e82-43f6-ad68-95330e936ac4 # 
 version: v1
-title: Places experience API
+title: Places Process API
 types: 
   Place:
     type: object
@@ -10,8 +10,8 @@ types:
       id_organization: string
       name: string
       address: string
-      lat: string
-      lng: string
+      latitude: string
+      longitude: string
 /{id_organization}:
   /places:
     get:
@@ -59,4 +59,4 @@ types:
           200:
             body: 
               application/json:
-                example: !include examples/json_files/responses/place_deleted.json         
+                example: !include examples/json_files/responses/place_deleted.json   
