@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd ">
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
     <apikit:config name="api-config" raml="api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <flow name="api-main">
         <http:listener path="/api/*" config-ref="Places_HTTP_Listener_config">
-            <http:response statusCode="#[vars.httpStatus default 200]">
-            </http:response>
+            <http:response statusCode="#[vars.httpStatus default 200]" />
             <http:error-response statusCode="#[vars.httpStatus default 500]">
                 <http:body><![CDATA[#[payload]]]></http:body>
             </http:error-response>
@@ -93,8 +93,7 @@ output application/json
     </flow>
     <flow name="api-console">
         <http:listener path="/console/*" config-ref="Places_HTTP_Listener_config">
-            <http:response statusCode="#[vars.httpStatus default 200]">
-            </http:response>
+            <http:response statusCode="#[vars.httpStatus default 200]" />
             <http:error-response statusCode="#[vars.httpStatus default 500]">
                 <http:body><![CDATA[#[payload]]]></http:body>
             </http:error-response>
@@ -117,15 +116,18 @@ output application/json
         </error-handler>
     </flow>
     <flow name="put:\(id_organization)\places\(id_place):application\json:api-config">
-		<flow-ref doc:name="update-place-flow" doc:id="56c237bb-4a87-4510-9d3d-cf2d54b87c91" name="update-place-flow" />
+        <flow-ref doc:name="update-place-flow" doc:id="56c237bb-4a87-4510-9d3d-cf2d54b87c91" name="update-place-flow" />
     </flow>
     <flow name="get:\(id_organization)\places:api-config">
-		<flow-ref doc:name="get-places-by-organization-flow" doc:id="60976bec-153e-433f-9f4f-43e29b1f4a65" name="get-places-by-organization-flow" />
+        <flow-ref doc:name="get-places-by-organization-flow" doc:id="60976bec-153e-433f-9f4f-43e29b1f4a65" name="get-places-by-organization-flow" />
     </flow>
     <flow name="get:\(id_organization)\places\(id_place):api-config">
-		<flow-ref doc:name="get-place-by-id-flow" doc:id="cf14053c-6ea1-4f7f-b3fe-1fc8e2fbcdeb" name="get-place-by-id-flow" />
+        <flow-ref doc:name="get-place-by-id-flow" doc:id="cf14053c-6ea1-4f7f-b3fe-1fc8e2fbcdeb" name="get-place-by-id-flow" />
     </flow>
     <flow name="post:\(id_organization)\places:application\json:api-config">
 		<flow-ref doc:name="create-place-flow" doc:id="84444c05-8072-408e-ad41-b37ce1e433f3" name="create-place-flow" />
+    </flow>
+    <flow name="delete:\(id_organization)\places\(id_place):api-config">
+		<flow-ref doc:name="delete-place-flow" doc:id="f3b3dc0a-48bc-4881-a23e-641a88abf08c" name="delete-place-flow" />
     </flow>
 </mule>

@@ -8,10 +8,3 @@ http:
   system:
     host: "localhost"
     port: "8083"  
-db:
-  sqlserver:
-    host: "159.203.86.203"
-    port: "1433"
-    user: "sa"
-    password: "SeyHhv&XT8.FCY#h"
-    dbname: "Beacons_Proximity"

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd ">
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
     <apikit:config name="api-config" raml="api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <flow name="api-main">
         <http:listener path="/api/*" config-ref="Places_HTTP_Listener_config">
@@ -126,6 +127,9 @@ output application/json
         <flow-ref doc:name="get-place-by-id-flow" doc:id="70df8209-5137-4bf4-b0f2-331cb3e79c73" name="get-place-by-id-flow"/>
     </flow>
     <flow name="post:\(id_organization)\places:application\json:api-config">
-        <flow-ref doc:name="create-place-flow" doc:id="dc0c84ff-be2e-417b-85a3-eaa7f7538457" name="create-place-flow"/>
+		<flow-ref doc:name="create-place-flow" doc:id="dc0c84ff-be2e-417b-85a3-eaa7f7538457" name="create-place-flow"/>
     </flow>
+	<flow name="delete:\(id_organization)\places\(id_place):api-config" doc:id="0910153c-25dd-495b-b834-f333351fe391" >
+		<flow-ref doc:name="delete-place-flow" doc:id="2001c0f3-bfe8-4bc7-9927-f6c32aac5ba8" name="delete-place-flow" />
+	</flow>
 </mule>
