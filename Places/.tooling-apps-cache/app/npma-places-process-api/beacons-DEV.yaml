@@ -1,0 +1,10 @@
+http:
+  experience:
+    host: "localhost"
+    port: "8081"
+  process:
+    host: "localhost"
+    port: "8082"
+  system:
+    host: "localhost"
+    port: "8083"  

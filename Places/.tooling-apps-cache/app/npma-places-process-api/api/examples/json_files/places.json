@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "id_organization": "ECB11EDB-3860-4733-9096-DC67FEDAD127",
+    "name": "Front Store",
+    "address": "8000 West Broad Street, Richmond, Virginia, USA",
+    "lat": "37.6246003",
+    "lng": "-77.5284526"   
+  },
+    {
+    "id": 2,
+    "id_organization": "ECB11EDB-3860-4733-9096-DC67FEDAD127",
+    "name": "Outside",
+    "address": "8000 West Broad Street, Richmond, Virginia, USA",
+    "lat": "37.6246003",
+    "lng": "-77.5284526"   
+  },
+    {
+    "id": 3,
+    "id_organization": "ECB11EDB-3860-4733-9096-DC67FEDAD127",
+    "name": "Electronics",
+    "address": "8000 West Broad Street, Richmond, Virginia, USA",
+    "lat": "37.6246003",
+    "lng": "-77.5284526"   
+  }
+]
