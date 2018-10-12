@@ -9,7 +9,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 			<http:uri-params><![CDATA[#[output application/java
 ---
 {
-	"id_organization" : attributes.uriParams.organization,
+	"id_organization" : attributes.uriParams.id_organization,
 	"id_place" : attributes.uriParams.id_place
 }]]]></http:uri-params>
 		</http:request>
