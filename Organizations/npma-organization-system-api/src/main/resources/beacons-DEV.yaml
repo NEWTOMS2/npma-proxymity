@@ -1,0 +1,7 @@
+db:
+  host: "159.203.86.203"
+  port: "1433"
+  user: "sa"
+  password: "SeyHhv&XT8.FCY#h"
+  database: "Beacons_Proximity"
+  
