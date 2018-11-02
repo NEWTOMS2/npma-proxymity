@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+	<flow name="database_response_handlerFlow" doc:id="c9192045-709d-419a-ad2f-9742e3a643c2" >
+		<choice doc:name="Choice" doc:id="870e3564-1ba3-43ee-bef0-d65d00314f6f" >
+			<when expression="#[vars.result.TransactionStatus &gt; 0]">
+				<ee:transform doc:name="Transaction Succes Message" doc:id="ffd27e6d-55e0-41fa-ae53-f3351368b2a6">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	status: {
+		operation: true,
+		message: vars.result.TransactionMessage
+	}
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<otherwise>
+				<ee:transform doc:name="Transaction Fail Message" doc:id="8b6e47cd-055c-41ce-92aa-8910c531f136">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	status: {
+		operation: false,
+		message: vars.result.TransactionMessage	
+	},
+	db:{
+		errorNumberDB: vars.result.ErrorNumberDB,
+		errorProcedureDB: vars.result.ErrorProcedureDB,
+		errorMessageDB: vars.result.ErrorMessageDB
+	}
+}]]></ee:set-payload>
+					</ee:message>
+					<ee:variables>
+						<ee:set-variable variableName="httpStatus"><![CDATA[500]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="Logger" doc:id="e3a527f4-b530-4cac-975c-15e24340b674" />
+	</flow>
+</mule>
